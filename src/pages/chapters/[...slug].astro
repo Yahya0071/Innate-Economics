@@ -65,11 +65,24 @@ const { Content } = await render(chapter);
         <span>← العودة لفهرس التجارب</span>
       </a>
 
-      <div class="text-right">
-        <span class="text-[11px] text-slate-500 block">التجربة القادمة:</span>
-        <span class="text-xs sm:text-sm font-bold text-amber-300">
-          جزيرة الرغيف والذهب (معضلة التضخم)
-        </span>
+      <div class="flex items-center gap-3">
+        {chapter.data.chapterNumber > 1 && (
+          <a
+            href="/chapters/1-currency-of-life"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 transition-colors"
+          >
+            <span>التجربة السابقة: ميزانية نبضات اليوم →</span>
+          </a>
+        )}
+
+        {chapter.data.chapterNumber === 1 && (
+          <a
+            href="/chapters/2-bread-and-gold"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-amber-400 hover:bg-amber-300 text-slate-950 transition-colors"
+          >
+            <span>← الانتقال للتجربة 2: جزيرة الرغيف والذهب</span>
+          </a>
+        )}
       </div>
     </div>
   </article>
