@@ -65,13 +65,22 @@ const { Content } = await render(chapter);
         <span>← العودة لفهرس التجارب</span>
       </a>
 
-      <div class="flex items-center gap-3">
-        {chapter.data.chapterNumber > 1 && (
+      <div class="flex flex-wrap items-center gap-3">
+        {chapter.data.chapterNumber === 2 && (
           <a
             href="/chapters/1-currency-of-life"
             class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 transition-colors"
           >
-            <span>التجربة السابقة: ميزانية نبضات اليوم →</span>
+            <span>التجربة 1: ميزانية نبضات اليوم →</span>
+          </a>
+        )}
+
+        {chapter.data.chapterNumber === 3 && (
+          <a
+            href="/chapters/2-bread-and-gold"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 transition-colors"
+          >
+            <span>التجربة 2: جزيرة الرغيف والذهب →</span>
           </a>
         )}
 
@@ -81,6 +90,15 @@ const { Content } = await render(chapter);
             class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-amber-400 hover:bg-amber-300 text-slate-950 transition-colors"
           >
             <span>← الانتقال للتجربة 2: جزيرة الرغيف والذهب</span>
+          </a>
+        )}
+
+        {chapter.data.chapterNumber === 2 && (
+          <a
+            href="/chapters/3-common-pasture"
+            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-400 hover:bg-emerald-300 text-slate-950 transition-colors"
+          >
+            <span>← الانتقال للتجربة 3: لغز المرعى المشترك</span>
           </a>
         )}
       </div>
