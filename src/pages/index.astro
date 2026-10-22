@@ -1,0 +1,290 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  Compass,
+  Sparkles,
+  ArrowLeft,
+  Clock,
+  Coins,
+  TreePine,
+  TrendingUp,
+  Landmark,
+  ShieldCheck,
+  Cpu,
+  Layers,
+} from 'lucide-react';
+
+const CHAPTERS = [
+  {
+    number: 1,
+    title: 'ميزانية نبضات اليوم',
+    subtitle: 'الندرة، تكلفة الفرصة البديلة، وتراكم رأس المال',
+    dilemma: '16 ساعة يقظة وطاقة تتآكل: كيف توزع يومك بين جمع طعام الليلة، وصنع شبكة صيد لغدك، وصيانة جسدك؟',
+    status: 'active',
+    slug: '1-currency-of-life',
+    icon: Clock,
+    color: 'from-amber-500/20 to-amber-500/5',
+    border: 'border-amber-500/30',
+    tagColor: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+  },
+  {
+    number: 2,
+    title: 'جزيرة الرغيف والذهب',
+    subtitle: 'التضخم النقدي، البرقيات السعرية، وعواقب التسعير الجبري',
+    dilemma: 'قرية مستقرة يكتشف أهلها بئراً من العملات الذهبية.. ماذا يحدث إذا ضاعفنا نقود الجميع دون زيادة الخبز؟',
+    status: 'upcoming',
+    slug: '#',
+    icon: Coins,
+    color: 'from-yellow-500/10 to-yellow-500/5',
+    border: 'border-slate-800',
+    tagColor: 'text-slate-400 bg-slate-900 border-slate-800',
+  },
+  {
+    number: 3,
+    title: 'لغز المرعى المشترك',
+    subtitle: 'تراجيديا المشاع، الحوافز الفردية، وحقوق الملكية',
+    dilemma: '5 رعاة يتقاسمون أرضاً عشبية تتجدد ببطء؛ كل رأس غنم إضافي يربح صاحبه وحده، فمتى تتصحر الأرض؟',
+    status: 'upcoming',
+    slug: '#',
+    icon: TreePine,
+    color: 'from-emerald-500/10 to-emerald-500/5',
+    border: 'border-slate-800',
+    tagColor: 'text-slate-400 bg-slate-900 border-slate-800',
+  },
+  {
+    number: 4,
+    title: 'استعارة طاقة الغد',
+    subtitle: 'الائتمان، الفائدة الزمنية، والدين الإنتاجي مقابل الاستهلاكي',
+    dilemma: 'مزارع يقترض بذوراً ليحفر بئراً فيتضاعف إنتاجه، مقابل آخر يقترض ليقيم وليمة.. تتبع مساريهما عبر الزمن.',
+    status: 'upcoming',
+    slug: '#',
+    icon: TrendingUp,
+    color: 'from-cyan-500/10 to-cyan-500/5',
+    border: 'border-slate-800',
+    tagColor: 'text-slate-400 bg-slate-900 border-slate-800',
+  },
+  {
+    number: 5,
+    title: 'همسة في السوق',
+    subtitle: 'السيولة، المضاعف المصرفي، وأزمات الهلع الجماعي (Bank Runs)',
+    dilemma: 'صندوق أمانات القرية يعمل بكفاءة إلى أن تخرج شائعة، فيسحب ثلاثة أشخاص ودائعهم في نفس اللحظة!',
+    status: 'upcoming',
+    slug: '#',
+    icon: Landmark,
+    color: 'from-purple-500/10 to-purple-500/5',
+    border: 'border-slate-800',
+    tagColor: 'text-slate-400 bg-slate-900 border-slate-800',
+  },
+];
+
+const FOUR_LOOPS = [
+  {
+    step: '1',
+    title: 'الاصطدام بالمأزق',
+    english: 'The Micro-Dilemma',
+    desc: 'تبدأ كل تجربة بقرار فوري بموارد محدودة ودون أي مقدمات نظرية أو مصطلحات جافة.',
+  },
+  {
+    step: '2',
+    title: 'الارتداد النظامي',
+    english: 'Systemic Consequence',
+    desc: 'يرى المستخدم النتيجة غير المتوقعة لقراره في اللحظة التالية عبر المحرك الرياضي الحي.',
+  },
+  {
+    step: '3',
+    title: 'العبث الحر',
+    english: 'Sandbox Manipulation',
+    desc: 'تُفتح أمامه المنزلقات والأزرار ليختبر، يعدل، ويكتشف الحدود الطبيعية للنظام بيده.',
+  },
+  {
+    step: '4',
+    title: 'البصيرة الصامتة',
+    english: 'The Crystallization',
+    desc: 'تتبلور الحكمة الفطرية بلغة المعاش اليومي، مع هامش اختياري يربطها بالمصطلح الأكاديمي.',
+  },
+];
+---
+
+<BaseLayout
+  title="الاقتصاد الفطري | شروحات تفاعلية قابلة للاستكشاف"
+  description="منصة عربية تفاعلية تعيد بناء المفاهيم الاقتصادية من خلال المحاكاة الحية والشروحات القابلة للاستكشاف."
+>
+  <!-- Hero Section -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-16 text-center relative">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs sm:text-sm font-semibold mb-6 animate-soft-pulse">
+      <Sparkles class="w-4 h-4 text-amber-400" />
+      <span>نموذج الشروحات القابلة للاستكشاف (Explorable Explanations)</span>
+    </div>
+
+    <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-tight sm:leading-none mb-6">
+      الاقتصاد كما ينبغي أن تفهمه: <br />
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200">
+        بفطرتك.. لا بكتب النظريات
+      </span>
+    </h1>
+
+    <p class="max-w-2xl mx-auto text-base sm:text-xl text-slate-300 font-light leading-relaxed mb-10">
+      استكشف القوانين الخفية التي تحكم الوقت، المال، والسوق من خلال قراراتك المباشرة ومحاكاة حية تتفاعل مع كل فكرة تخطر ببالك.
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      <a
+        href="/chapters/1-currency-of-life"
+        class="inline-flex items-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 transition-all shadow-xl glow-amber text-sm sm:text-base cursor-pointer"
+      >
+        <span>ابدأ التجربة 1: ميزانية نبضات اليوم</span>
+        <ArrowLeft class="w-5 h-5" />
+      </a>
+
+      <a
+        href="#philosophy"
+        class="inline-flex items-center gap-2 px-6 py-4 rounded-2xl font-semibold text-slate-300 bg-slate-900/80 hover:bg-slate-800 border border-slate-800 transition-colors text-sm sm:text-base cursor-pointer"
+      >
+        <span>دستور التصميم الفطري</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- The 4-Loops Philosophy -->
+  <section id="philosophy" class="max-w-5xl mx-auto px-4 sm:px-6 py-16 border-t border-slate-900">
+    <div class="text-center mb-12">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">
+        منهجية العمل
+      </h2>
+      <h3 class="text-2xl sm:text-4xl font-extrabold text-white">
+        دستور التصميم الفطري: قاعدة الحلقات الأربع
+      </h3>
+      <p class="text-slate-400 text-sm sm:text-base mt-2">
+        كل تجربة في هذه المنصة مصممة بدقة لتمنع تحول المعرفة إلى مجرد "مقال مدرسي".
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {FOUR_LOOPS.map((loop) => (
+        <div class="glass-panel rounded-2xl p-6 border border-slate-800 relative hover:border-slate-700 transition-colors">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-300 font-mono font-bold flex items-center justify-center text-sm border border-amber-500/20 mb-4">
+            {loop.step}
+          </div>
+          <h4 class="text-lg font-bold text-slate-100 mb-1">{loop.title}</h4>
+          <span class="text-[11px] font-mono text-slate-500 block mb-3">{loop.english}</span>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed font-light">{loop.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- The 5 Chapters Roadmap -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-16 border-t border-slate-900">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-10">
+      <div>
+        <h2 class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-1">
+          خارطة الطريق (MVP)
+        </h2>
+        <h3 class="text-2xl sm:text-3xl font-extrabold text-white">
+          التجارب الخمس: من الفرد إلى المجتمع
+        </h3>
+      </div>
+      <span class="text-xs text-slate-400">
+        رحلة تصاعدية تبدأ من ميزانية يومك وتصل إلى أسواق المال
+      </span>
+    </div>
+
+    <div class="space-y-4">
+      {CHAPTERS.map((ch) => {
+        const Icon = ch.icon;
+        const isActive = ch.status === 'active';
+
+        return (
+          <div
+            class={`glass-panel rounded-3xl p-6 sm:p-8 border ${ch.border} bg-gradient-to-r ${ch.color} transition-all duration-300 ${
+              isActive ? 'hover:scale-[1.01] hover:border-amber-500/50 shadow-xl' : 'opacity-70'
+            }`}
+          >
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 mt-1">
+                  <Icon class="w-6 h-6 text-amber-400" />
+                </div>
+                <div>
+                  <div class="flex items-center gap-2 mb-1.5">
+                    <span class={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${ch.tagColor}`}>
+                      {isActive ? 'التجربة متاحة الآن' : 'قيد الصياغة والمحاكاة'}
+                    </span>
+                    <span class="text-xs font-mono text-slate-500">الفصل {ch.number}</span>
+                  </div>
+                  <h4 class="text-xl sm:text-2xl font-bold text-white mb-1">
+                    {ch.title}
+                  </h4>
+                  <p class="text-xs sm:text-sm text-slate-400 mb-2">
+                    {ch.subtitle}
+                  </p>
+                  <p class="text-xs sm:text-sm text-slate-300 font-light leading-relaxed max-w-2xl">
+                    <strong class="text-slate-200 font-semibold">المأزق المعاش: </strong>
+                    {ch.dilemma}
+                  </p>
+                </div>
+              </div>
+
+              <div class="shrink-0">
+                {isActive ? (
+                  <a
+                    href={`/chapters/${ch.slug}`}
+                    class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs sm:text-sm text-slate-950 bg-amber-400 hover:bg-amber-300 transition-colors shadow-lg cursor-pointer"
+                  >
+                    <span>دخول التجربة التفاعلية</span>
+                    <ArrowLeft class="w-4 h-4" />
+                  </a>
+                ) : (
+                  <span class="inline-block px-4 py-2 rounded-xl text-xs font-medium text-slate-500 bg-slate-900/60 border border-slate-800">
+                    قريباً
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Engineering Architecture Callout -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-16 border-t border-slate-900">
+    <div class="glass-panel bg-slate-950/70 rounded-3xl p-8 border border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-right">
+      <div class="flex items-start gap-3">
+        <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400 shrink-0">
+          <Cpu class="w-5 h-5" />
+        </div>
+        <div>
+          <h5 class="text-sm font-bold text-slate-200 mb-1">محرك رياضي نقي (Pure Engine)</h5>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            فصل تام لمنطق المحاكاة في كود TypeScript نقي بدون أي ارتباط بالواجهة، لضمان أعلى درجات الدقة.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3">
+        <div class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 shrink-0">
+          <ShieldCheck class="w-5 h-5" />
+        </div>
+        <div>
+          <h5 class="text-sm font-bold text-slate-200 mb-1">حزم اختبارات Vitest صارمة</h5>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            التحقق من كافة القوانين الرياضية وثبات الموارد والخصائص الحدية قبل أن يرى المستخدم أي واجهة.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-start gap-3">
+        <div class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 shrink-0">
+          <Layers class="w-5 h-5" />
+        </div>
+        <div>
+          <h5 class="text-sm font-bold text-slate-200 mb-1">جزر تفاعلية خفيفة وسريعة</h5>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            توليد صفحات ثابتة فائقة السرعة مع تنشيط تفاعلي للأجزاء الحية فقط عبر Astro و React Islands.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
