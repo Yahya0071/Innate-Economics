@@ -15,6 +15,7 @@ import {
   Zap,
   FolderGit2,
   ExternalLink,
+  FlaskConical,
 } from 'lucide-react';
 import { RoughHighlight } from '../components/RoughHighlight';
 
@@ -306,29 +307,57 @@ const FOUR_LOOPS = [
       </div>
     </div>
 
-    <!-- Open Source Repositories Banner -->
-    <div class="mt-8 p-6 rounded-3xl bg-gradient-to-r from-amber-500/10 via-slate-900 to-cyan-500/10 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3.5 text-right">
-        <div class="p-3 rounded-2xl bg-slate-900 border border-slate-700 text-amber-400 shrink-0">
-          <FolderGit2 class="w-6 h-6" />
+    <!-- Interactive Labs & Ecosystem Dual Banners -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Sandbox Banner */}
+      <div class="p-6 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-slate-900 to-slate-950 border border-emerald-500/30 flex flex-col justify-between gap-4">
+        <div class="flex items-start gap-3.5 text-right">
+          <div class="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
+            <FlaskConical class="w-6 h-6" />
+          </div>
+          <div>
+            <h4 class="text-sm sm:text-base font-bold text-white mb-1">
+              المخبر الاقتصادي الحر (Sandbox Mode)
+            </h4>
+            <p class="text-xs text-slate-400 leading-relaxed font-light">
+              اختبر محاكاة الوكلاء وقانون باريتو (80/20)، حرّك منحنيات العرض والطلب باللمس عبر Mafs، وأصدر جواز سفرك الاقتصادي.
+            </p>
+          </div>
         </div>
-        <div>
-          <h4 class="text-sm sm:text-base font-bold text-white">
-            المستودعات والمصادر المفتوحة الملهمة للمنصة
-          </h4>
-          <p class="text-xs text-slate-400">
-            استكشف كنز الأكواد المفتوحة في نظرية الألعاب، والنمذجة القياسية الحوسبية، ومحركات المحاكاة البصرية.
-          </p>
-        </div>
+
+        <a
+          href="/sandbox"
+          class="inline-flex items-center justify-between px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition-colors"
+        >
+          <span>دخول المخبر التجريبي</span>
+          <ArrowLeft class="w-3.5 h-3.5" />
+        </a>
       </div>
 
-      <a
-        href="/resources"
-        class="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-md transition-colors"
-      >
-        <span>استعراض المستودعات</span>
-        <ArrowLeft class="w-3.5 h-3.5" />
-      </a>
+      {/* Repositories Banner */}
+      <div class="p-6 rounded-3xl bg-gradient-to-br from-amber-500/10 via-slate-900 to-slate-950 border border-slate-800 flex flex-col justify-between gap-4">
+        <div class="flex items-start gap-3.5 text-right">
+          <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">
+            <FolderGit2 class="w-6 h-6" />
+          </div>
+          <div>
+            <h4 class="text-sm sm:text-base font-bold text-white mb-1">
+              المستودعات والمصادر المفتوحة
+            </h4>
+            <p class="text-xs text-slate-400 leading-relaxed font-light">
+              استكشف المشاريع البرمجية والأكاديمية العالمية في نظرية الألعاب، النمذجة القياسية الحوسبية، ومحركات المحاكاة.
+            </p>
+          </div>
+        </div>
+
+        <a
+          href="/resources"
+          class="inline-flex items-center justify-between px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-amber-400 hover:text-slate-950 text-slate-200 border border-slate-700 hover:border-amber-400 font-bold text-xs shadow-md transition-all"
+        >
+          <span>استعراض كنز المستودعات</span>
+          <ArrowLeft class="w-3.5 h-3.5" />
+        </a>
+      </div>
     </div>
   </section>
 </BaseLayout>

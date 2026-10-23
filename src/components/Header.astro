@@ -1,5 +1,5 @@
 ---
-import { BookOpen, Sparkles, User, FolderGit2 } from 'lucide-react';
+import { BookOpen, Sparkles, User, FolderGit2, FlaskConical } from 'lucide-react';
 
 import { AudioToggle } from './AudioToggle';
 import { SearchModal } from './SearchModal';
@@ -45,6 +45,14 @@ const { currentChapter = 'الفصل الأول' } = Astro.props;
       >
         <User class="w-3.5 h-3.5 text-cyan-400" />
         <span>منشئ المنصة</span>
+      </a>
+
+      <a
+        href="/sandbox"
+        class="text-xs sm:text-sm font-medium text-slate-300 hover:text-emerald-300 transition-colors inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl hover:bg-slate-900 border border-transparent hover:border-slate-800"
+      >
+        <FlaskConical class="w-3.5 h-3.5 text-emerald-400" />
+        <span>المخبر (Sandbox)</span>
       </a>
 
       <a

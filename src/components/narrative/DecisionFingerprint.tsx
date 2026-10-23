@@ -8,7 +8,8 @@ import {
   Shield,
   Hourglass,
   Scale,
-  Zap
+  Zap,
+  FileText,
 } from 'lucide-react';
 import {
   determineArchetype,
@@ -18,6 +19,8 @@ import {
   type ArchetypeId
 } from '../../engine/core/archetypes';
 import { playCoinSound, playSoftClick, playSuccessChime } from '../../engine/core/audio';
+import { DecisionRadarChart, type RadarDimension } from './DecisionRadarChart';
+import { EconomicPassportModal } from './EconomicPassportModal';
 
 export interface DecisionFingerprintProps {
   chapterId: string;
@@ -42,7 +45,41 @@ export const DecisionFingerprint: React.FC<DecisionFingerprintProps> = ({
 
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [passportModalOpen, setPassportModalOpen] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const dimensions: RadarDimension[] = React.useMemo(() => {
+    const baseScore = profile.balanceAxis.score;
+    const timePref =
+      profile.id === 'patient-builder'
+        ? 95
+        : profile.id === 'cautious-guardian'
+          ? 75
+          : Math.max(30, Math.min(95, 100 - baseScore * 0.5));
+    const commons =
+      profile.id === 'cautious-guardian' ? 90 : profile.id === 'dynamic-balancer' ? 80 : 60;
+    const liquidity =
+      profile.id === 'high-liquidity-adventurer'
+        ? 35
+        : profile.id === 'cautious-guardian'
+          ? 90
+          : 75;
+    const firmness =
+      profile.id === 'dynamic-balancer'
+        ? 85
+        : profile.id === 'high-liquidity-adventurer'
+          ? 80
+          : 65;
+    const capital = profile.id === 'patient-builder' ? 90 : 70;
+
+    return [
+      { key: 'time', label: 'الصبر الزمني', score: Math.round(timePref) },
+      { key: 'commons', label: 'حماية المشاع', score: Math.round(commons) },
+      { key: 'liquidity', label: 'الحذر المصرفي', score: Math.round(liquidity) },
+      { key: 'firmness', label: 'الحزم التنافسي', score: Math.round(firmness) },
+      { key: 'capital', label: 'كفاءة رأس المال', score: Math.round(capital) },
+    ];
+  }, [profile]);
 
   // Generate shareable URL with encoded simulation state
   const getShareUrl = (): string => {
@@ -363,6 +400,26 @@ export const DecisionFingerprint: React.FC<DecisionFingerprintProps> = ({
         </p>
       </div>
 
+      {/* 5-Axis Radar Chart Visualizer */}
+      <div className="relative z-10 mb-8 bg-slate-950/60 border border-slate-800/80 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="space-y-2 text-right">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 text-[11px] font-semibold">
+            <Sparkles className="w-3 h-3" />
+            <span>المخطط الراداري الخماسي للسلوك</span>
+          </div>
+          <h4 className="text-base sm:text-lg font-bold text-white">
+            خريطة الأبعاد الاقتصادية لشخصيتك
+          </h4>
+          <p className="text-xs text-slate-400 leading-relaxed font-light max-w-sm">
+            تحليل دقيق لخمسة أبعاد سلوكية متداخلة، يظهر توازنك بين الصبر الاستثماري وحماية المشاع والحزم التنافسي في السوق.
+          </p>
+        </div>
+
+        <div className="shrink-0 flex items-center justify-center">
+          <DecisionRadarChart dimensions={dimensions} size={250} />
+        </div>
+      </div>
+
       {/* Human Balance Bar */}
       <div className="relative z-10 mb-8 bg-slate-950/50 border border-slate-800/60 rounded-2xl p-5">
         <div className="flex justify-between items-center text-xs font-semibold text-slate-300 mb-2">
@@ -437,6 +494,19 @@ export const DecisionFingerprint: React.FC<DecisionFingerprintProps> = ({
           <span>{downloading ? 'جارٍ رسم البطاقة...' : 'حفظ البطاقة كصورة'}</span>
         </button>
 
+        {/* Economic Passport / PDF Report */}
+        <button
+          type="button"
+          onClick={() => {
+            playSoftClick();
+            setPassportModalOpen(true);
+          }}
+          className="px-5 py-3 rounded-2xl bg-cyan-950/70 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-200 hover:text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <FileText className="w-4 h-4 text-cyan-400" />
+          <span>جواز السفر وتقرير PDF</span>
+        </button>
+
         {/* WhatsApp Share */}
         <a
           href={getWhatsAppShareUrl()}
@@ -469,6 +539,15 @@ export const DecisionFingerprint: React.FC<DecisionFingerprintProps> = ({
           </span>
         )}
       </div>
+
+      {/* Economic Passport Modal */}
+      <EconomicPassportModal
+        isOpen={passportModalOpen}
+        onClose={() => setPassportModalOpen(false)}
+        profile={profile}
+        dimensions={dimensions}
+        chapterTitle={chapterTitle}
+      />
     </div>
   );
 };
