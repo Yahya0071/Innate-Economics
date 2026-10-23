@@ -1,8 +1,30 @@
 import React, { useState } from 'react';
-import { Lightbulb, BookOpen, ChevronDown, ChevronUp, Sparkles, Globe, Calculator } from 'lucide-react';
+import {
+  Lightbulb,
+  BookOpen,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  Globe,
+  Calculator,
+  ArrowRightLeft,
+  CheckCircle2,
+} from 'lucide-react';
 import katex from 'katex';
 import { playTick, playTone } from '../../utils/audio';
 
+export interface WorkedExampleStep {
+  title: string;
+  math?: string;
+  note: string;
+}
+
+export interface WorkedExample {
+  title: string;
+  initialState: string;
+  steps: WorkedExampleStep[];
+  result: string;
+}
 
 export interface AcademicTerm {
   arabic: string;
@@ -11,6 +33,7 @@ export interface AcademicTerm {
   intuitiveAnalogy?: string; // Everyday intuitive analogy for non-specialists
   formula?: string; // KaTeX mathematical equation
   formulaExplanation?: string; // Plain-Arabic breakdown of what each symbol means
+  workedExample?: WorkedExample; // Step-by-step numbers walkthrough until the result
   realWorldImpact?: string; // Where do we see this in modern reality today?
 }
 
@@ -81,7 +104,7 @@ export const InsightBox: React.FC<InsightBoxProps> = ({
                   ماذا تسمي الكتب الأكاديمية هذه الظاهرة؟
                 </span>
                 <span className="text-[11px] sm:text-xs text-slate-400 font-light block -mt-0.5">
-                  شرح تفصيلي مبسط ومترجم للغة الحياة اليومية لغير المتخصصين ({academicTerms.length} مفاهيم)
+                  شرح تفصيلي مبسط، أمثلة واقعية، وتطبيق حسابي خطوة بخطوة ({academicTerms.length} مفاهيم)
                 </span>
               </div>
             </div>
@@ -97,7 +120,7 @@ export const InsightBox: React.FC<InsightBoxProps> = ({
               {academicTerms.map((term, idx) => (
                 <div
                   key={idx}
-                  className="bg-slate-950/80 rounded-2xl p-5 sm:p-6 border border-slate-800 shadow-xl space-y-4 hover:border-slate-700 transition-colors"
+                  className="bg-slate-950/80 rounded-2xl p-5 sm:p-6 border border-slate-800 shadow-xl space-y-5 hover:border-slate-700 transition-colors"
                 >
                   {/* Term Header */}
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800/80">
@@ -166,6 +189,76 @@ export const InsightBox: React.FC<InsightBoxProps> = ({
                           {term.formulaExplanation}
                         </div>
                       )}
+                    </div>
+                  )}
+
+                  {/* Step-by-Step Numerical Walkthrough (Requested Feature) */}
+                  {term.workedExample && (
+                    <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 space-y-3.5">
+                      <div className="flex items-center justify-between pb-2 border-b border-emerald-500/20">
+                        <div className="flex items-center gap-2 text-emerald-300 font-bold text-xs sm:text-sm">
+                          <ArrowRightLeft className="w-4 h-4 text-emerald-400" />
+                          <span>{term.workedExample.title}</span>
+                        </div>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-900/60 text-emerald-300 border border-emerald-700/40">
+                          تطبيق رقمي خطوة بخطوة
+                        </span>
+                      </div>
+
+                      {/* Initial Setup */}
+                      <div className="text-xs text-emerald-100/90 bg-slate-950/60 p-3 rounded-xl border border-emerald-900/40 font-light leading-relaxed">
+                        <strong className="text-emerald-300 font-bold block mb-1">
+                          🏁 نقطة البداية والمعطيات:
+                        </strong>
+                        {term.workedExample.initialState}
+                      </div>
+
+                      {/* Walkthrough Steps */}
+                      <div className="space-y-2.5">
+                        {term.workedExample.steps.map((st, sIdx) => (
+                          <div
+                            key={sIdx}
+                            className="bg-slate-900/80 rounded-xl p-3 border border-slate-800 text-xs space-y-1.5"
+                          >
+                            <div className="font-semibold text-slate-200 flex items-center gap-1.5">
+                              <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] flex items-center justify-center font-mono">
+                                {sIdx + 1}
+                              </span>
+                              <span>{st.title}</span>
+                            </div>
+
+                            {st.math && (
+                              <div
+                                className="py-1 px-2.5 bg-slate-950 rounded-lg text-amber-300 font-mono text-left overflow-x-auto text-xs"
+                                dir="ltr"
+                                dangerouslySetInnerHTML={{
+                                  __html: katex.renderToString(st.math, {
+                                    throwOnError: false,
+                                    displayMode: false,
+                                  }),
+                                }}
+                              />
+                            )}
+
+                            <p className="text-slate-400 font-light leading-relaxed">
+                              {st.note}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Final Conclusion / Punchline */}
+                      <div className="bg-emerald-950/60 border border-emerald-500/40 rounded-xl p-3 flex items-start gap-2.5 text-xs text-emerald-200">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-emerald-300 block mb-0.5">
+                            النتيجة التي وصلت إليها المعادلة:
+                          </strong>
+                          <span className="font-light leading-relaxed">
+                            {term.workedExample.result}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   )}
 
