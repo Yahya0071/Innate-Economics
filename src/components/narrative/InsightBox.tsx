@@ -190,18 +190,20 @@ export const InsightBox: React.FC<InsightBoxProps> = ({
 
                     {/* KaTeX Mathematical Formula & Plain Explanation */}
                     {mainCleanFormula && (
-                      <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-2.5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-semibold text-slate-400 flex items-center gap-1.5">
+                      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3 shadow-inner">
+                        <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                          <span className="text-xs font-semibold text-cyan-300 flex items-center gap-1.5">
                             <Calculator className="w-3.5 h-3.5 text-cyan-400" />
-                            الصياغة الرياضية في كتب الاقتصاد:
+                            الصيغة الرياضية القياسية في المراجع:
                           </span>
-                          <span className="text-[10px] text-slate-500 font-mono">LaTeX Equation</span>
+                          <span className="text-[10px] text-cyan-400/90 bg-cyan-950/70 px-2 py-0.5 rounded-md border border-cyan-800/40 font-mono">
+                            Standard Notation
+                          </span>
                         </div>
 
-                        <div className="py-2 overflow-x-auto text-center" dir="ltr">
+                        <div className="py-2.5 overflow-x-auto text-center" dir="ltr">
                           <div
-                            className="text-amber-200 text-sm sm:text-base inline-block font-mono"
+                            className="text-amber-200 text-base sm:text-lg inline-block font-mono tracking-wide py-1 px-4 rounded-xl bg-slate-950/70 border border-slate-800/60 shadow-sm"
                             dangerouslySetInnerHTML={{
                               __html: katex.renderToString(mainCleanFormula, {
                                 throwOnError: false,
@@ -212,9 +214,13 @@ export const InsightBox: React.FC<InsightBoxProps> = ({
                         </div>
 
                         {term.formulaExplanation && (
-                          <div className="text-xs text-slate-400 pt-2 border-t border-slate-800 leading-relaxed font-light">
-                            <strong className="text-slate-300 ml-1">تفكيك رموز المعادلة ببساطة:</strong>
-                            <bdi>{term.formulaExplanation}</bdi>
+                          <div className="text-xs text-slate-300 pt-3 border-t border-slate-800 leading-relaxed font-light bg-slate-950/40 p-3 rounded-xl border border-slate-800/50">
+                            <strong className="text-amber-300 ml-1 block mb-1 font-semibold">
+                              💡 تفكيك رموز المعادلة بلغة بسيطة:
+                            </strong>
+                            <bdi className="text-slate-300 leading-relaxed block">
+                              {term.formulaExplanation}
+                            </bdi>
                           </div>
                         )}
                       </div>
