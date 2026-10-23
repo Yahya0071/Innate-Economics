@@ -8,19 +8,26 @@ import {
   LineChart,
   Fingerprint,
   Compass,
-  Cpu,
+  Coins,
+  CheckCircle2,
+  HelpCircle,
+  Eye,
+  Sliders,
+  TrendingUp,
 } from 'lucide-react';
 import { AgentEconomySimulation } from '../components/simulations/AgentEconomySimulation';
 import { InteractiveEquilibriumCurve } from '../components/curves/InteractiveEquilibriumCurve';
 import { DecisionFingerprint } from '../components/narrative/DecisionFingerprint';
+import { PhysicsCoinVault } from '../components/physics/PhysicsCoinVault';
+import { TradingViewPriceChart } from '../components/charts/TradingViewPriceChart';
 ---
 
 <BaseLayout
   title="المخبر الاقتصادي التجريبي (Sandbox) | منصة الاقتصاد الفطري"
-  description="مخبر تفاعلي مفتوح لاختبار نماذج الاقتصاد الكلي، محاكاة الوكلاء وتفاوت الثروة التلقائي (قانون باريتو)، وتحريك منحنيات العرض والطلب باللمس والسحب."
+  description="مخبر تفاعلي مبسط للجميع: اختبر محاكاة الوكلاء وقانون باريتو، حرّك منحنيات العرض والطلب باللمس، وتفاعل مع فيزياء العملات النقدية ومخططات التداول الحية."
 >
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-14">
-    <!-- Breadcrumb -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-16">
+    <!-- Top Breadcrumb -->
     <div class="flex items-center justify-between">
       <a
         href="/"
@@ -40,89 +47,183 @@ import { DecisionFingerprint } from '../components/narrative/DecisionFingerprint
       </div>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Hero Header -->
     <section class="glass-panel rounded-3xl p-6 sm:p-10 border-slate-800 relative overflow-hidden shadow-2xl">
       <div class="absolute -top-24 -left-24 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div class="relative z-10 space-y-4">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 text-xs font-semibold">
-          <FlaskConical class="w-4 h-4" />
-          <span>Experimental Laboratory & Visual Sandbox</span>
+          <Sparkles class="w-4 h-4" />
+          <span>مرحباً بك في ساحة التجريب المباشر</span>
         </div>
 
         <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
           المخبر الاقتصادي
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-cyan-300 to-amber-300 block sm:inline sm:mr-3">
-            الحر والتجريبي
+            المبسط للجميع
           </span>
         </h1>
 
         <p class="text-slate-300 text-sm sm:text-base font-light leading-relaxed max-w-3xl">
-          هنا تنتقل من قراءة الفصول السردية إلى دور <strong class="text-white font-medium">الباحث التجريبي</strong>. في هذا المخبر، يمكنك تغيير المتغيرات، اختبار ظهور تفاوت الثروة التلقائي بين 60 وكيلاً ذكياً، سحب منحنيات العرض والطلب باللمس الحي، وإصدار جواز سفرك الاقتصادي المعتمد.
+          صُمم هذا المخبر ليكون <strong class="text-white font-medium">ممتعاً ومفهوماً لأي شخص دون أي خلفية اقتصادية مسبقة</strong>. هنا لا تقرأ نظريات مجردة، بل تتحكم بيدك في نماذج حية: تحرك الأسعار، تراقب قرية كاملة تتبادل الذهب، وتسقط عملات نقدية فيزيائية لتفهم بنفسك كيف يعمل العالم.
         </p>
 
-        <!-- Quick Jump Tabs -->
-        <div class="flex flex-wrap items-center gap-3 pt-3 text-xs">
+        <!-- 3-Step Guide for Non-Specialists -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 text-xs">
+          <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/90 space-y-1.5">
+            <div class="flex items-center gap-2 text-amber-400 font-bold">
+              <span className="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center text-[11px] font-mono">1</span>
+              <span>ما هي مدخلاتك؟ (بيدك)</span>
+            </div>
+            <p class="text-slate-400 leading-relaxed font-light text-[11px]">
+              أزرار تشغيل، ومقابض تسحبها باللمس أو الفأرة، ومفاتيح تبديل تغير قواعد اللعبة في كل تجربة.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/90 space-y-1.5">
+            <div class="flex items-center gap-2 text-cyan-400 font-bold">
+              <span className="w-5 h-5 rounded-full bg-cyan-500/20 flex items-center justify-center text-[11px] font-mono">2</span>
+              <span>ما هي المخرجات؟ (تراها حية)</span>
+            </div>
+            <p class="text-slate-400 leading-relaxed font-light text-[11px]">
+              دوائر تنمو وتتقلص، وأسعار تتحرك في اللحظة نفسها، وعملات تتصادم وتسقط بفيزياء واقعية.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800/90 space-y-1.5">
+            <div class="flex items-center gap-2 text-emerald-400 font-bold">
+              <span className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-[11px] font-mono">3</span>
+              <span>المترجم الفوري (الشرح المبسط)</span>
+            </div>
+            <p class="text-slate-400 leading-relaxed font-light text-[11px]">
+              شريط تفسيري ملون أسفل كل تجربة يخبرك فوراً باللغة البسيطة: ماذا حدث الآن ولماذا وما هي الحكمة!
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Jump Navigation -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 text-xs">
           <a
             href="#agent-economy"
-            class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-amber-300 transition-colors flex items-center gap-2"
+            class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-amber-300 transition-colors flex items-center gap-1.5"
           >
-            <Users class="w-4 h-4 text-amber-400" />
-            <span>1. محاكاة الوكلاء وتفاوت باريتو</span>
+            <Users class="w-3.5 h-3.5 text-amber-400" />
+            <span>المحطة 1: قرية الـ 60 تاجراً</span>
           </a>
           <a
             href="#equilibrium-curves"
-            class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-cyan-300 transition-colors flex items-center gap-2"
+            class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-cyan-300 transition-colors flex items-center gap-1.5"
           >
-            <LineChart class="w-4 h-4 text-cyan-400" />
-            <span>2. المنحنيات التفاعلية (Mafs)</span>
+            <LineChart class="w-3.5 h-3.5 text-cyan-400" />
+            <span>المحطة 2: سوق السمك والمنحنيات</span>
+          </a>
+          <a
+            href="#physics-vault"
+            class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-yellow-300 transition-colors flex items-center gap-1.5"
+          >
+            <Coins class="w-3.5 h-3.5 text-yellow-400" />
+            <span>المحطة 3: فيزياء العملات وتداول الأسعار</span>
           </a>
           <a
             href="#decision-radar"
-            class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-emerald-300 transition-colors flex items-center gap-2"
+            class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-emerald-300 transition-colors flex items-center gap-1.5"
           >
-            <Fingerprint class="w-4 h-4 text-emerald-400" />
-            <span>3. الرادار الخماسي وجواز السفر</span>
+            <Fingerprint class="w-3.5 h-3.5 text-emerald-400" />
+            <span>المحطة 4: جواز السفر الاقتصادي</span>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- Lab 1: Agent-Based Economy -->
+    <!-- Station 1: Agent-Based Economy Simulation -->
     <section id="agent-economy" class="space-y-4">
-      <div class="flex items-center gap-2.5 text-amber-400 text-xs font-semibold uppercase tracking-wider">
-        <Sparkles class="w-4 h-4" />
-        <span>المحطة الأولى: النمذجة القائمة على الوكلاء</span>
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+        <div class="flex items-center gap-2 text-amber-400 text-sm font-bold">
+          <span className="w-6 h-6 rounded-lg bg-amber-500/10 flex items-center justify-center text-xs font-mono">01</span>
+          <span>المحطة الأولى: محاكاة 60 قروياً ولغز تركز الثروة (قانون باريتو)</span>
+        </div>
+        <span class="text-[11px] text-slate-500 hidden sm:inline">Agent-Based Economy Model</span>
       </div>
       <AgentEconomySimulation client:load />
     </section>
 
-    <!-- Lab 2: Interactive Mafs Curves -->
+    <!-- Station 2: Mafs Interactive Curves (Fish Market Story) -->
     <section id="equilibrium-curves" class="space-y-4">
-      <div class="flex items-center gap-2.5 text-cyan-400 text-xs font-semibold uppercase tracking-wider">
-        <Sparkles class="w-4 h-4" />
-        <span>المحطة الثانية: المنحنيات الرياضية التفاعلية الحية</span>
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+        <div class="flex items-center gap-2 text-cyan-400 text-sm font-bold">
+          <span className="w-6 h-6 rounded-lg bg-cyan-500/10 flex items-center justify-center text-xs font-mono">02</span>
+          <span>المحطة الثانية: سوق السمك على المرفأ — كيف تتولد الأسعار تلقائياً؟</span>
+        </div>
+        <span class="text-[11px] text-slate-500 hidden sm:inline">Mafs Touch Equilibrium Curves</span>
       </div>
       <InteractiveEquilibriumCurve client:load />
     </section>
 
-    <!-- Lab 3: Decision Radar & Economic Passport -->
-    <section id="decision-radar" class="space-y-4">
-      <div class="flex items-center gap-2.5 text-emerald-400 text-xs font-semibold uppercase tracking-wider">
-        <Sparkles class="w-4 h-4" />
-        <span>المحطة الثالثة: بطاقة البصمة الخماسية وجواز السفر الرسمي</span>
+    <!-- Station 3: Physics Vault & Live TradingView Price Chart -->
+    <section id="physics-vault" class="space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+        <div class="flex items-center gap-2 text-yellow-400 text-sm font-bold">
+          <span className="w-6 h-6 rounded-lg bg-yellow-500/10 flex items-center justify-center text-xs font-mono">03</span>
+          <span>المحطة الثالثة: الملمس الحسي للنقود وتتبع مسارات التداول اللحظية</span>
+        </div>
+        <span class="text-[11px] text-slate-500 hidden sm:inline">Matter.js Physics + TradingView Charts</span>
       </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <PhysicsCoinVault
+          client:load
+          initialCoins={18}
+          label="خزينة الذهب الفيزيائية التفاعلية (Matter.js 2D Physics)"
+        />
+        <TradingViewPriceChart
+          client:load
+          data={[
+            { time: '2026-01-01', value: 1.0 },
+            { time: '2026-01-02', value: 1.1 },
+            { time: '2026-01-03', value: 1.05 },
+            { time: '2026-01-04', value: 1.25 },
+            { time: '2026-01-05', value: 1.4 },
+            { time: '2026-01-06', value: 1.8 },
+            { time: '2026-01-07', value: 2.1 },
+            { time: '2026-01-08', value: 2.5 },
+          ]}
+          title="مخطط التضخم والأسعار الحي (TradingView Engine)"
+          height={240}
+        />
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 text-xs text-slate-300 leading-relaxed font-light space-y-1">
+        <div class="flex items-center gap-1.5 text-yellow-400 font-bold text-[11px]">
+          <CheckCircle2 class="w-3.5 h-3.5" />
+          <span>كيف تتفاعل مع هذه المحطة؟</span>
+        </div>
+        <p>
+          انقر داخل الخزينة اليسرى بالماوس لتسقط عملات نقدية ذهبية جديدة تتصادم مع الجدران والأرضية بفيزياء حقيقية وصوت رنين لمسي؛ وشاهد في اليمين كيف يتتبع محرك TradingView المالي مسار قفزات السعر في السوق استجابة لزيادة كمية النقد المتداول.
+        </p>
+      </div>
+    </section>
+
+    <!-- Station 4: Decision Radar & Official Passport Export -->
+    <section id="decision-radar" class="space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+        <div class="flex items-center gap-2 text-emerald-400 text-sm font-bold">
+          <span className="w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center text-xs font-mono">04</span>
+          <span>المحطة الرابعة: فحص البصمة الخماسية وإصدار جواز سفرك الاقتصادي (PDF)</span>
+        </div>
+        <span class="text-[11px] text-slate-500 hidden sm:inline">Biometric Radar & jsPDF Passport</span>
+      </div>
+
       <DecisionFingerprint
         client:load
         chapterId="sandbox"
-        chapterTitle="المخبر الاقتصادي التجريبي"
-        metrics={{ timeScore: 85, commonsScore: 90, riskScore: 70 }}
+        chapterTitle="المخبر الاقتصادي التجريبي الشامل"
+        metrics={{ timeScore: 88, commonsScore: 92, riskScore: 72 }}
         statItems={[
-          { label: 'المرونة السلوكية', value: '94%' },
-          { label: 'كفاءة القرارات', value: 'A+' },
-          { label: 'مستوى الأمان', value: 'متوازن' },
-          { label: 'التصنيف الفطري', value: 'مستثمر رصين' },
+          { label: 'الصبر الاستثماري', value: '95%' },
+          { label: 'حماية المشاع', value: '88%' },
+          { label: 'إدارة السيولة', value: 'متزنة' },
+          { label: 'النمط الفطري', value: 'الباني الصبور' },
         ]}
       />
     </section>
