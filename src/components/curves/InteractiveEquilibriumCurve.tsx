@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Mafs, Coordinates, Plot, MovablePoint, Line, Text } from 'mafs';
 import 'mafs/core.css';
 import { playSoftClick } from '../../engine/core/audio';
@@ -11,13 +11,23 @@ import {
   ShoppingBag,
   Info,
   CheckCircle2,
+  Activity,
 } from 'lucide-react';
+import {
+  subscribeEconomicEvent,
+  type CoinDroppedPayload,
+  type VillageTickPayload,
+} from '../../engine/core/eventBridge';
 
 export function InteractiveEquilibriumCurve() {
   // Demand curve intercept (0 to 10) - Default: 8
   const [demandIntercept, setDemandIntercept] = useState<number>(8);
   // Supply curve intercept (0 to 10) - Default: 2
   const [supplyIntercept, setSupplyIntercept] = useState<number>(2);
+
+  // Cross-Island live synchronization state
+  const [liveSync, setLiveSync] = useState<boolean>(true);
+  const [liveNotice, setLiveNotice] = useState<string | null>(null);
 
   // Constant slopes
   const slopeDemand = 0.8;
@@ -37,6 +47,7 @@ export function InteractiveEquilibriumCurve() {
   const handleDemandPointMove = useCallback((point: [number, number]) => {
     const newY = Math.max(4, Math.min(10, point[1]));
     setDemandIntercept(newY);
+    setLiveNotice(null);
     playSoftClick();
   }, []);
 
@@ -44,16 +55,67 @@ export function InteractiveEquilibriumCurve() {
   const handleSupplyPointMove = useCallback((point: [number, number]) => {
     const newY = Math.max(0.5, Math.min(5, point[1]));
     setSupplyIntercept(newY);
+    setLiveNotice(null);
     playSoftClick();
   }, []);
 
   const resetToDefault = () => {
     setDemandIntercept(8);
     setSupplyIntercept(2);
+    setLiveNotice(null);
     playSoftClick();
   };
 
+  // Cross-Island Event Subscriptions
+  useEffect(() => {
+    if (!liveSync) return;
+
+    // 1. When coins dropped in physics vault -> Shifts demand curve outwards (higher money supply)
+    const unsubCoin = subscribeEconomicEvent('innate:coin-dropped', (payload: CoinDroppedPayload) => {
+      // Shifting demand intercept upwards as money increases: from 7.5 up to 9.8
+      const shiftedDemand = Math.min(9.8, 7.2 + payload.count * 0.12);
+      setDemandIntercept(Number(shiftedDemand.toFixed(1)));
+      setLiveNotice(
+        `تأثير تدفق الذهب في الخزينة (+1): زيادة السيولة النقدية (${payload.count} عملة) زادت شهية الإنفاق، فأزاحت منحنى الطلب للأعلى وقفز سعر التوازن إلى ${equilibrium.p} د!`
+      );
+    });
+
+    // 2. When vault is cleared -> Deflationary demand collapse
+    const unsubReset = subscribeEconomicEvent('innate:vault-reset', () => {
+      setDemandIntercept(5.0);
+      setLiveNotice(
+        'تأثير إفراغ الخزينة: أزمة سيولة مفاجئة أزاحت منحنى الطلب للأسفل، مما أدى إلى انكماش سعري حاد!'
+      );
+    });
+
+    // 3. When the 60 villagers simulation ticks -> Shifts curves based on velocity and market health
+    const unsubVillage = subscribeEconomicEvent('innate:village-tick', (payload: VillageTickPayload) => {
+      if (payload.marketMode === 'barter') {
+        // Barter friction: high transaction friction dampens effective market demand
+        setDemandIntercept(6.5);
+        setLiveNotice(
+          `تأثير وضع المقايضة في القرية: احتكاك التبادل وغياب تطابق الرغبات ضغط على السوق فانكمش الطلب إلى 6.5!`
+        );
+      } else {
+        // Monetary boom or interest debt drag
+        const shift = (payload.velocity - 1.0) * 1.5 - (payload.totalDebt * 0.03);
+        const dynamicIntercept = Math.max(5.5, Math.min(9.8, 8.0 + shift));
+        setDemandIntercept(Number(dynamicIntercept.toFixed(1)));
+        setLiveNotice(
+          `مزامنة حية مع القرية (جولة ${payload.round}): سرعة دوران النقد V=${payload.velocity} وديون القرية=${payload.totalDebt} د تحرك منحنى توازن السوق لحظياً!`
+        );
+      }
+    });
+
+    return () => {
+      unsubCoin();
+      unsubReset();
+      unsubVillage();
+    };
+  }, [liveSync, equilibrium.p]);
+
   const applyScenario = (scenario: 'boom' | 'storm' | 'bumper' | 'normal') => {
+    setLiveNotice(null);
     if (scenario === 'boom') {
       setDemandIntercept(9.8);
       setSupplyIntercept(2);
@@ -110,14 +172,47 @@ export function InteractiveEquilibriumCurve() {
             <span>تجربة واقعية: كيف يتحدد السعر في سوق السمك؟</span>
           </div>
 
-          <button
-            onClick={resetToDefault}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-colors cursor-pointer"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>إعادة الوضع الطبيعي</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => {
+                setLiveSync((prev) => !prev);
+                playSoftClick();
+              }}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium transition-all cursor-pointer ${
+                liveSync
+                  ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300 shadow-sm'
+                  : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white'
+              }`}
+            >
+              <Activity className={`w-3.5 h-3.5 ${liveSync ? 'animate-pulse text-emerald-400' : 'text-slate-500'}`} />
+              <span>{liveSync ? 'مزامنة مع القرية والخزينة: نشطة ⚡' : 'المزامنة: متوقفة'}</span>
+            </button>
+
+            <button
+              onClick={resetToDefault}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium transition-colors cursor-pointer"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>إعادة الوضع الطبيعي</span>
+            </button>
+          </div>
         </div>
+
+        {/* Live Cross-Island Sync Notification Banner */}
+        {liveNotice && (
+          <div className="p-3 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-cyan-950/30 border border-emerald-500/30 text-xs text-emerald-200 flex items-center justify-between gap-3 animate-in fade-in duration-300">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>{liveNotice}</span>
+            </div>
+            <button
+              onClick={() => setLiveNotice(null)}
+              className="text-[10px] text-slate-400 hover:text-white shrink-0 p-1"
+            >
+              إخفاء ✕
+            </button>
+          </div>
+        )}
 
         <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
           لعبة توازن الأسعار الفطرية: حرّك المنحنيات بيدك

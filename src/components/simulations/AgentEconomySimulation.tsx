@@ -45,6 +45,7 @@ import {
   playSoftClick,
   playSuccessChime,
 } from '../../engine/core/audio';
+import { emitEconomicEvent } from '../../engine/core/eventBridge';
 
 export function AgentEconomySimulation() {
   const [mode, setMode] = useState<'player' | 'institutions' | 'barter' | 'missions' | 'observe'>('player');
@@ -78,6 +79,16 @@ export function AgentEconomySimulation() {
         lastAudioRoundRef.current = next.round;
         playCoinSound();
       }
+      emitEconomicEvent('innate:village-tick', {
+        round: next.round,
+        totalWealth: next.metrics.totalWealth,
+        velocity: next.metrics.velocityOfMoney,
+        gini: next.metrics.giniCoefficient,
+        averagePrice: Number((1.0 + next.metrics.velocityOfMoney * 0.8 + (next.institutions.interestBank ? next.metrics.totalDebt * 0.02 : 0)).toFixed(2)),
+        totalTrades: next.agents.reduce((acc, a) => acc + a.tradesCount, 0),
+        marketMode: next.marketMode,
+        totalDebt: next.metrics.totalDebt,
+      });
       return next;
     });
   }, []);
@@ -104,6 +115,16 @@ export function AgentEconomySimulation() {
             playCoinSound();
           }
         }
+        emitEconomicEvent('innate:village-tick', {
+          round: next.round,
+          totalWealth: next.metrics.totalWealth,
+          velocity: next.metrics.velocityOfMoney,
+          gini: next.metrics.giniCoefficient,
+          averagePrice: Number((1.0 + next.metrics.velocityOfMoney * 0.8 + (next.institutions.interestBank ? next.metrics.totalDebt * 0.02 : 0)).toFixed(2)),
+          totalTrades: next.agents.reduce((acc, a) => acc + a.tradesCount, 0),
+          marketMode: next.marketMode,
+          totalDebt: next.metrics.totalDebt,
+        });
         return next;
       });
     }, Math.max(30, 220 / speed));

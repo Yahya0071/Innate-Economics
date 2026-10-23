@@ -2,17 +2,20 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Matter from 'matter-js';
 import { playCoinSound, playSoftClick } from '../../engine/core/audio';
 import { Coins, Plus, RotateCcw, Sparkles } from 'lucide-react';
+import { emitEconomicEvent, calculateFisherPriceLevel } from '../../engine/core/eventBridge';
 
 export interface PhysicsCoinVaultProps {
   initialCoins?: number;
   maxCoins?: number;
   label?: string;
+  onCoinChange?: (coinsCount: number, priceLevel: number) => void;
 }
 
 export function PhysicsCoinVault({
   initialCoins = 12,
   maxCoins = 120,
   label = 'خزينة الذهب الفيزيائية (Matter.js 2D Physics)',
+  onCoinChange,
 }: PhysicsCoinVaultProps) {
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const engineRef = useRef<Matter.Engine | null>(null);
@@ -42,7 +45,21 @@ export function PhysicsCoinVault({
     });
 
     Composite.add(engineRef.current.world, coin);
-    setCoinsCount((prev) => Math.min(maxCoins, prev + 1));
+    setCoinsCount((prev) => {
+      const nextCount = Math.min(maxCoins, prev + 1);
+      const fisher = calculateFisherPriceLevel(nextCount, 1.2, 12);
+      emitEconomicEvent('innate:coin-dropped', {
+        count: nextCount,
+        delta: 1,
+        priceLevel: fisher.priceLevel,
+        purchasingPower: fisher.purchasingPower,
+        timestamp: Date.now(),
+      });
+      if (onCoinChange) {
+        onCoinChange(nextCount, fisher.priceLevel);
+      }
+      return nextCount;
+    });
 
     // Throttled tactile sound
     const now = Date.now();
@@ -50,7 +67,7 @@ export function PhysicsCoinVault({
       lastSoundTimeRef.current = now;
       playCoinSound();
     }
-  }, [maxCoins]);
+  }, [maxCoins, onCoinChange]);
 
   // Reset vault
   const handleReset = useCallback(() => {
@@ -64,13 +81,17 @@ export function PhysicsCoinVault({
       }
     });
     setCoinsCount(0);
+    emitEconomicEvent('innate:vault-reset', { timestamp: Date.now() });
+    if (onCoinChange) {
+      onCoinChange(0, 0.25);
+    }
     playSoftClick();
 
     // Spawn initial batch
     for (let i = 0; i < initialCoins; i++) {
       setTimeout(() => spawnCoin(), i * 60);
     }
-  }, [initialCoins, spawnCoin]);
+  }, [initialCoins, spawnCoin, onCoinChange]);
 
   useEffect(() => {
     if (!sceneRef.current) return;

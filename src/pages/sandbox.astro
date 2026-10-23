@@ -173,22 +173,13 @@ import { TradingViewPriceChart } from '../components/charts/TradingViewPriceChar
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <PhysicsCoinVault
           client:load
-          initialCoins={18}
+          initialCoins={12}
           label="خزينة الذهب الفيزيائية التفاعلية (Matter.js 2D Physics)"
         />
         <TradingViewPriceChart
           client:load
-          data={[
-            { time: '2026-01-01', value: 1.0 },
-            { time: '2026-01-02', value: 1.1 },
-            { time: '2026-01-03', value: 1.05 },
-            { time: '2026-01-04', value: 1.25 },
-            { time: '2026-01-05', value: 1.4 },
-            { time: '2026-01-06', value: 1.8 },
-            { time: '2026-01-07', value: 2.1 },
-            { time: '2026-01-08', value: 2.5 },
-          ]}
-          title="مخطط التضخم والأسعار الحي (TradingView Engine)"
+          enableLiveSync={true}
+          title="مخطط التضخم والأسعار اللحظي (TradingView Engine)"
           height={240}
         />
       </div>
@@ -196,10 +187,10 @@ import { TradingViewPriceChart } from '../components/charts/TradingViewPriceChar
       <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 text-xs text-slate-300 leading-relaxed font-light space-y-1">
         <div class="flex items-center gap-1.5 text-yellow-400 font-bold text-[11px]">
           <CheckCircle2 class="w-3.5 h-3.5" />
-          <span>كيف تتفاعل مع هذه المحطة؟</span>
+          <span>المزامنة الحية بين المحطات (الشبكة العصبية الاقتصادية للمخبر):</span>
         </div>
         <p>
-          انقر داخل الخزينة اليسرى بالماوس لتسقط عملات نقدية ذهبية جديدة تتصادم مع الجدران والأرضية بفيزياء حقيقية وصوت رنين لمسي؛ وشاهد في اليمين كيف يتتبع محرك TradingView المالي مسار قفزات السعر في السوق استجابة لزيادة كمية النقد المتداول.
+          انقر داخل الخزينة اليسرى لتسقط عملات ذهبية جديدة أو اضغط على «تشغيل» في قرية الـ 60 تاجراً بالأعلى؛ راقب كيف يتتبع محرك TradingView المالي مسار قفزات السعر لحظياً استجابة لزيادة النقد وسرعة التداول، وكيف ينعكس ذلك على إزاحة منحنيات العرض والطلب في المحطة الثانية في التو واللحظة!
         </p>
       </div>
     </section>
