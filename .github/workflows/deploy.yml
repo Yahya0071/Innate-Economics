@@ -1,4 +1,4 @@
-name: CI/CD & Deploy
+name: CI/CD & Deploy (Cloudflare Pages / Vercel)
 
 on:
   push:
@@ -8,12 +8,14 @@ on:
 
 jobs:
   verify-and-build:
+    name: Verify, Test & Build
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -22,11 +24,21 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Typecheck
+      - name: Typecheck (tsc --noEmit)
         run: npm run typecheck
 
       - name: Run Engine Tests (Vitest)
         run: npm run test
 
-      - name: Build Astro Project
+      - name: Build Static Astro Site (dist/)
         run: npm run build
+
+      - name: Deploy to Cloudflare Pages (Optional / Production)
+        if: github.ref == 'refs/heads/main' && env.CLOUDFLARE_API_TOKEN != ''
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=innate-economics
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

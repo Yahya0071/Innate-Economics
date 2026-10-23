@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
-import { isSoundMuted, toggleSound, playTactileTick } from '../utils/audio';
+import { isSoundMuted, toggleSound, playSoftClick } from '../engine/core/audio';
 
 export const AudioToggle: React.FC = () => {
   const [muted, setMuted] = useState(false);
@@ -13,7 +13,7 @@ export const AudioToggle: React.FC = () => {
     const nextState = toggleSound();
     setMuted(nextState);
     if (!nextState) {
-      playTactileTick();
+      playSoftClick();
     }
   };
 

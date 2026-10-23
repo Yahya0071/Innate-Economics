@@ -11,6 +11,11 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://innate-economics.pages.dev',
+  output: 'static',
+  trailingSlash: 'ignore',
+  build: {
+    format: 'directory',
+  },
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],
@@ -26,8 +31,8 @@ export default defineConfig({
         name: 'الاقتصاد الفطري | Explorable Economics',
         short_name: 'الاقتصاد الفطري',
         description: 'شروحات استكشافية تحاكي آليات الاقتصاد والندرة بلغة بصرية وفطرية أصيلة',
-        theme_color: '#0c0a09',
-        background_color: '#0c0a09',
+        theme_color: '#080c14',
+        background_color: '#080c14',
         display: 'standalone',
         dir: 'rtl',
         lang: 'ar',
@@ -50,4 +55,3 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 });
-

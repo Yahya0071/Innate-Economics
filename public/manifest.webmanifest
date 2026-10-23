@@ -1,0 +1,19 @@
+{
+  "name": "الاقتصاد الفطري | Explorable Economics",
+  "short_name": "الاقتصاد الفطري",
+  "description": "شروحات استكشافية تحاكي آليات الاقتصاد والندرة بلغة بصرية وفطرية أصيلة",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080c14",
+  "theme_color": "#080c14",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,17 +1,27 @@
 @echo off
-chcp 65001 > nul
-title منصة الاقتصاد الفطري - تشغيل فوري
+chcp 65001 >nul
+title Innate Economics - منصة الاقتصاد الفطري
+
 cd /d "%~dp0"
 
 echo ================================================================
-echo          منصة «الاقتصاد الفطري» | Explorable Economics
-echo                  تطوير وبحث: يحيى سراس
+echo   Innate Economics Platform - منصة الاقتصاد الفطري
+echo   Explorable Interactive Economics
 echo ================================================================
 echo.
-echo  [*] جاري تشغيل خادم المنصة وفتح الموقع في المتصفح تلقائياً...
+echo   [*] Starting platform dev server and opening browser...
+echo   [*] جاري تشغيل خادم المنصة وفتح المتصفح تلقائيا...
 echo.
-echo  (للإيقاف في أي وقت: اضغط Ctrl + C ثم Y)
+echo   [!] To stop the server at any time: Press Ctrl + C
 echo ================================================================
 echo.
 
-npm run dev -- --open
+call npm run dev -- --open
+
+if %ERRORLEVEL% neq 0 (
+    echo.
+    echo [!] Server stopped or encountered an error.
+    echo [!] حدث خطأ أثناء تشغيل الخادم.
+    echo.
+    pause
+)
