@@ -4,6 +4,12 @@ import {
   calculateMetrics,
   stepEconomyRound,
   applyRedistribution,
+  applyBaytAlMal,
+  toggleInstitution,
+  playerVoluntaryZakat,
+  evaluateMission,
+  getPersonaCommentary,
+  setMarketMode,
 } from '../../src/engine/agent-economy/engine';
 
 describe('Agent-Based Economy Simulation Engine', () => {
@@ -111,4 +117,119 @@ describe('Agent-Based Economy Simulation Engine', () => {
     expect(metrics.minWealth).toBe(0);
     expect(metrics.giniCoefficient).toBeGreaterThan(0.7);
   });
+
+  it('supports player agent initialization and rank calculation', () => {
+    const economy = createInitialEconomy({ numAgents: 30, enablePlayer: true });
+    const player = economy.agents.find((a) => a.isPlayer);
+    expect(player).toBeDefined();
+    expect(player?.name).toBe('أنت (التاجر)');
+    expect(economy.metrics.playerWealth).toBe(100);
+    expect(economy.metrics.playerRank).toBe(1);
+  });
+
+  it('allows player to perform voluntary Zakat which enriches the poorest', () => {
+    let economy = createInitialEconomy({ numAgents: 20, enablePlayer: true });
+    economy.agents[0].wealth = 200;
+    // Make one agent poorer to see dividend effect
+    economy.agents[19].wealth = 30;
+    const poorestBefore = economy.agents[19].wealth;
+
+    // Player donates 20
+    const updated = playerVoluntaryZakat(economy, 20);
+    expect(updated.agents[0].wealth).toBe(180);
+    // Poorest received their dividend share
+    const targetAgent = updated.agents.find((a) => a.id === 19);
+    expect(targetAgent?.wealth).toBeGreaterThan(poorestBefore);
+  });
+
+  it('correctly tracks and evaluates missions', () => {
+    const economy = createInitialEconomy({ numAgents: 20, enablePlayer: true });
+    const evaluation = evaluateMission(economy, 'mercantile_rise');
+    expect(evaluation.status).toBe('in_progress');
+    expect(evaluation.progressPct).toBe(0);
+
+    // Simulate winning condition
+    economy.agents[0].wealth = 150;
+    const wonEvaluation = evaluateMission(economy, 'mercantile_rise');
+    expect(wonEvaluation.status).toBe('completed');
+    expect(wonEvaluation.progressPct).toBe(100);
+  });
+
+  it('generates rich Socratic commentary for both Ibn Khaldun and Adam Smith', () => {
+    const economy = createInitialEconomy({ numAgents: 20 });
+    const dialogue = getPersonaCommentary(economy, false);
+
+    expect(dialogue.ibnKhaldun.name).toBe('ابن خلدون');
+    expect(dialogue.adamSmith.name).toBe('آدم سميث');
+    expect(dialogue.ibnKhaldun.observation).toBeTruthy();
+    expect(dialogue.adamSmith.observation).toBeTruthy();
+
+    // Check high inequality commentary
+    economy.agents[0].wealth = 1500;
+    for (let i = 1; i < 20; i++) economy.agents[i].wealth = 5;
+    const extremeEconomy = { ...economy, metrics: calculateMetrics(economy.agents) };
+    const warningDialogue = getPersonaCommentary(extremeEconomy, false);
+    expect(warningDialogue.ibnKhaldun.tone).toBe('warning');
+    expect(warningDialogue.adamSmith.tone).toBe('warning');
+  });
+
+  it('handles institutional agents: Interest Bank introduces debt and Bayt Al-Mal clears it', () => {
+    let economy = createInitialEconomy({ numAgents: 20 });
+    // Enable interest bank
+    economy = toggleInstitution(economy, 'interestBank', true);
+    expect(economy.institutions.interestBank).toBe(true);
+
+    // Make an agent impoverished to trigger emergency lending
+    economy.agents[1].wealth = 5;
+    economy = stepEconomyRound(economy);
+
+    // Agent 1 should have received loan and accumulated debt
+    expect(economy.agents[1].debt).toBeGreaterThan(0);
+    expect(economy.metrics.totalDebt).toBeGreaterThan(0);
+
+    // Now enable Bayt Al-Mal to provide debt relief
+    economy = toggleInstitution(economy, 'baytAlMal', true);
+    // Give wealthier agents surplus to collect Zakat from
+    economy.agents[0].wealth = 500;
+    const debtBefore = economy.metrics.totalDebt;
+
+    // Apply Bayt Al-Mal
+    applyBaytAlMal(economy.agents, 0.05, true);
+    economy.metrics = calculateMetrics(economy.agents, economy.institutions);
+
+    expect(economy.metrics.totalDebt).toBeLessThan(debtBefore);
+  });
+
+  it('demonstrates barter failure (double coincidence of wants problem) versus currency efficiency', () => {
+    let economy = createInitialEconomy({ numAgents: 20 });
+
+    // Switch to barter mode
+    economy = setMarketMode(economy, 'barter');
+    expect(economy.marketMode).toBe('barter');
+
+    // Run 10 rounds of pure barter
+    for (let r = 0; r < 10; r++) {
+      economy = stepEconomyRound(economy);
+    }
+
+    // In barter with 4 commodities and circular needs, most random pairings fail!
+    expect(economy.metrics.barterAttempts).toBeGreaterThan(0);
+    expect(economy.metrics.barterFailures).toBeGreaterThan(0);
+    expect(economy.metrics.barterEfficiency).toBeLessThan(100);
+
+    // Switch to currency mode
+    economy = setMarketMode(economy, 'currency');
+    const failuresBeforeCurrency = economy.metrics.barterFailures;
+
+    // Run 10 rounds with money
+    for (let r = 0; r < 10; r++) {
+      economy = stepEconomyRound(economy);
+    }
+
+    // In currency mode, no additional barter failures should occur
+    expect(economy.metrics.barterFailures).toBe(failuresBeforeCurrency);
+    expect(economy.metrics.barterSuccesses).toBeGreaterThan(0);
+  });
 });
+
+

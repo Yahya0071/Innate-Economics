@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Header from '../components/Header.astro';
+import { SocraticCompanion } from '../components/socratic/SocraticCompanion';
 
 interface Props {
   title?: string;
@@ -75,5 +76,8 @@ const {
         </p>
       </div>
     </footer>
+
+    <!-- Global Interactive Socratic Companion Island -->
+    <SocraticCompanion client:idle />
   </body>
 </html>
