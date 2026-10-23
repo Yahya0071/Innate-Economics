@@ -27,6 +27,7 @@ import {
   Sparkles,
   Landmark,
 } from 'lucide-react';
+import { playTactileTick, playWaterDrop, playCoinChime, playSuccessChime, playWarningThud } from '../../utils/audio';
 
 export const BorrowingSimulation: React.FC = () => {
   const [state, setState] = useState<FarmerCreditState>(() => {
@@ -68,6 +69,11 @@ export const BorrowingSimulation: React.FC = () => {
     setProductiveBags(clamped);
     const fresh = createInitialFarmerState();
     setState(applyLoanDecision(fresh, { productiveBags: clamped, consumptionBags: loanPrincipal - clamped }, { interestRate }));
+    if (clamped > 0) {
+      playWaterDrop();
+    } else {
+      playTactileTick();
+    }
   };
 
   const handleLoanSizeChange = (val: number) => {
@@ -84,9 +90,16 @@ export const BorrowingSimulation: React.FC = () => {
     const next = advanceCreditSeason(state);
     setState(next);
 
-    // Repaid in full triumph
-    if (state.season === state.debtDueSeason && !next.isBankrupt && next.debtPrincipal === 0) {
+    if (next.isBankrupt) {
+      playWarningThud();
+    } else if (state.season === state.debtDueSeason && next.debtPrincipal === 0) {
+      playSuccessChime();
+      playCoinChime();
       confetti({ particleCount: 80, spread: 80, origin: { y: 0.6 } });
+    } else if (next.wellCompleted) {
+      playWaterDrop();
+    } else {
+      playTactileTick();
     }
   };
 

@@ -23,6 +23,7 @@ import {
   Clock,
   Compass,
 } from 'lucide-react';
+import { playTactileTick, playSuccessChime, playWarningThud } from '../../utils/audio';
 
 interface Preset {
   name: string;
@@ -116,10 +117,12 @@ export const TimeBudgetSimulation: React.FC = () => {
     }
 
     setAllocation(current);
+    playTactileTick();
   };
 
   const handleApplyPreset = (preset: Preset) => {
     setAllocation(preset.allocation);
+    playTactileTick();
   };
 
   const handleStepDay = () => {
@@ -129,8 +132,15 @@ export const TimeBudgetSimulation: React.FC = () => {
       const next = simulateDay(state, allocation);
       setState(next);
 
+      if (next.history[next.history.length - 1].status === 'starving' || next.energy < 25) {
+        playWarningThud();
+      } else {
+        playTactileTick();
+      }
+
       // Trigger celebratory confetti if completing day 7 flourishing
       if (next.day > next.maxDays && next.energy >= 50 && next.foodStock >= 5) {
+        playSuccessChime();
         confetti({
           particleCount: 80,
           spread: 70,

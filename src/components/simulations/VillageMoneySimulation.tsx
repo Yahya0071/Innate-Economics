@@ -23,6 +23,7 @@ import {
   Users,
   ShieldAlert,
 } from 'lucide-react';
+import { playCoinChime, playTactileTick, playWarningThud, playSuccessChime } from '../../utils/audio';
 
 export const VillageMoneySimulation: React.FC = () => {
   const [state, setState] = useState<VillageMarketState>(() => createInitialVillageState());
@@ -57,16 +58,19 @@ export const VillageMoneySimulation: React.FC = () => {
 
   const handleGoldChange = (val: number) => {
     setState((prev) => ({ ...prev, goldSupply: Math.max(10, val) }));
+    playTactileTick();
   };
 
   const handleInjectGoldBurst = () => {
     setState((prev) => injectGold(prev, 30));
+    playCoinChime();
   };
 
   const handleBuildOven = () => {
     if (state.ovensCount < MAX_OVENS) {
       const next = expandOvens(state);
       setState(next);
+      playSuccessChime();
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
     }
   };
@@ -74,6 +78,11 @@ export const VillageMoneySimulation: React.FC = () => {
   const handleTogglePriceCeiling = () => {
     setState((prev) => {
       const newCeiling = prev.priceCeiling === null ? 1.0 : null;
+      if (newCeiling !== null) {
+        playWarningThud();
+      } else {
+        playTactileTick();
+      }
       return setPriceControl(prev, newCeiling);
     });
   };

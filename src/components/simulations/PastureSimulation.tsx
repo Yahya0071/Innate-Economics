@@ -24,6 +24,7 @@ import {
   Layers,
   Users,
 } from 'lucide-react';
+import { playTactileTick, playWarningThud, playSuccessChime } from '../../utils/audio';
 
 export const PastureSimulation: React.FC = () => {
   const [state, setState] = useState<PastureState>(() => createInitialPastureState());
@@ -60,7 +61,14 @@ export const PastureSimulation: React.FC = () => {
     const { nextState, outcome } = evaluateSeason(state, playerSheepInput, selectedMode);
     setState(nextState);
 
+    if (nextState.isDesertified || nextState.pastureHealth < 30) {
+      playWarningThud();
+    } else {
+      playTactileTick();
+    }
+
     if (nextState.season > 5 && nextState.pastureHealth >= 70 && !nextState.isDesertified) {
+      playSuccessChime();
       confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
     }
   };

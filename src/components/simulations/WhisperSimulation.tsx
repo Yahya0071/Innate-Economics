@@ -23,6 +23,7 @@ import {
   Building2,
   Sparkles,
 } from 'lucide-react';
+import { playTactileTick, playWarningThud, playSuccessChime, playCoinChime } from '../../utils/audio';
 
 export const WhisperSimulation: React.FC = () => {
   const [state, setState] = useState<BankVaultState>(() => createInitialVaultState(1000, 0.20));
@@ -50,6 +51,7 @@ export const WhisperSimulation: React.FC = () => {
 
   const handleRatioChange = (val: number) => {
     setState((prev) => updateReserveRatio(prev, val / 100));
+    playTactileTick();
   };
 
   const handleTriggerPanic = (level: PanicLevel) => {
@@ -57,17 +59,24 @@ export const WhisperSimulation: React.FC = () => {
     const { nextState, outcome } = simulateWithdrawalRun(state, level);
     setState(nextState);
 
-    if (level === 'panic-run' && outcome.shortage === 0 && nextState.status === 'solvent') {
+    if (outcome.shortage > 0 || nextState.status !== 'solvent') {
+      playWarningThud();
+    } else if (level === 'panic-run') {
+      playSuccessChime();
       confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
+    } else {
+      playCoinChime();
     }
   };
 
   const handleToggleInsurance = () => {
     setState((prev) => toggleDepositInsurance(prev));
+    playTactileTick();
   };
 
   const handleToggleLender = () => {
     setState((prev) => toggleLenderOfLastResort(prev));
+    playTactileTick();
   };
 
   const handleReset = () => {
@@ -224,9 +233,8 @@ export const WhisperSimulation: React.FC = () => {
           </span>
           <div className="flex items-baseline gap-2 mt-1">
             <span
-              className={`text-3xl font-extrabold font-mono ${
-                state.cashReserves > 100 ? 'text-amber-300' : 'text-rose-400'
-              }`}
+              className={`text-3xl font-extrabold font-mono ${state.cashReserves > 100 ? 'text-amber-300' : 'text-rose-400'
+                }`}
             >
               {state.cashReserves}
             </span>
@@ -262,26 +270,24 @@ export const WhisperSimulation: React.FC = () => {
               مؤشر ثقة المودعين
             </span>
             <span
-              className={`text-sm font-bold font-mono ${
-                state.confidence >= 70
+              className={`text-sm font-bold font-mono ${state.confidence >= 70
                   ? 'text-emerald-400'
                   : state.confidence >= 30
-                  ? 'text-amber-400'
-                  : 'text-rose-400'
-              }`}
+                    ? 'text-amber-400'
+                    : 'text-rose-400'
+                }`}
             >
               {state.confidence}%
             </span>
           </div>
           <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden mt-2">
             <div
-              className={`h-full transition-all duration-500 rounded-full ${
-                state.confidence >= 70
+              className={`h-full transition-all duration-500 rounded-full ${state.confidence >= 70
                   ? 'bg-emerald-500'
                   : state.confidence >= 30
-                  ? 'bg-amber-500'
-                  : 'bg-rose-500'
-              }`}
+                    ? 'bg-amber-500'
+                    : 'bg-rose-500'
+                }`}
               style={{ width: `${state.confidence}%` }}
             />
           </div>
@@ -289,8 +295,8 @@ export const WhisperSimulation: React.FC = () => {
             {state.confidence >= 80
               ? 'اطمئنان عام؛ لا أحد يفكر بالركض للسحب.'
               : state.confidence >= 40
-              ? 'همهمات وتوجس؛ عيون الناس ترقب باب الخزينة.'
-              : 'هلع جماعي مذعور! التدافع يسقط الجميع.'}
+                ? 'همهمات وتوجس؛ عيون الناس ترقب باب الخزينة.'
+                : 'هلع جماعي مذعور! التدافع يسقط الجميع.'}
           </p>
         </div>
 
@@ -409,11 +415,10 @@ export const WhisperSimulation: React.FC = () => {
             <button
               type="button"
               onClick={handleToggleInsurance}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                state.hasDepositInsurance
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${state.hasDepositInsurance
                   ? 'bg-cyan-500 text-slate-950 glow-cyan'
                   : 'bg-slate-800 text-slate-400 hover:text-slate-200'
-              }`}
+                }`}
             >
               {state.hasDepositInsurance ? 'مُفعّل' : 'مُعطل'}
             </button>
@@ -432,11 +437,10 @@ export const WhisperSimulation: React.FC = () => {
             <button
               type="button"
               onClick={handleToggleLender}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                state.isLenderOfLastResortActive
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${state.isLenderOfLastResortActive
                   ? 'bg-emerald-500 text-slate-950 glow-emerald'
                   : 'bg-slate-800 text-slate-400 hover:text-slate-200'
-              }`}
+                }`}
             >
               {state.isLenderOfLastResortActive ? 'مُفعّل' : 'مُعطل'}
             </button>
