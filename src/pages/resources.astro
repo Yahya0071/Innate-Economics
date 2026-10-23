@@ -1,0 +1,509 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  FolderGit2,
+  ExternalLink,
+  Star,
+  GitBranch,
+  BookOpen,
+  Sparkles,
+  ArrowLeft,
+  Compass,
+  Cpu,
+  LineChart,
+  Boxes,
+  Share2,
+  CheckCircle2,
+  Network,
+} from 'lucide-react';
+
+interface RepoItem {
+  id: string;
+  name: string;
+  repo: string;
+  url: string;
+  stars: string;
+  category: 'explorables' | 'computational' | 'engines';
+  categoryLabel: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  innateApplication: string;
+  language: string;
+  tags: string[];
+  featured?: boolean;
+}
+
+const repositories: RepoItem[] = [
+  {
+    id: 'ncase-trust',
+    name: 'The Evolution of Trust (تطور الثقة)',
+    repo: 'ncase/trust',
+    url: 'https://github.com/ncase/trust',
+    stars: '5.8k',
+    category: 'explorables',
+    categoryLabel: 'شروحات استكشافية ونظرية الألعاب',
+    descriptionAr: 'المحاكاة التفاعلية الأشهر عالمياً في تفكيك معضلة السجينين (Prisoner\'s Dilemma) واستراتيجيات السن بالسن (Tit for Tat) عبر نظرية الألعاب.',
+    descriptionEn: 'An interactive game theory guide to the mechanics of trust, mistrust, and reciprocal altruism.',
+    innateApplication: 'الأساس الرياضي والسلوكي للفصل السادس في منصتنا (لغز حرب الأسعار وتوازن ناش).',
+    language: 'JavaScript / Web Audio',
+    tags: ['Game Theory', 'Nash Equilibrium', 'Interactive Learning', 'Tit-for-Tat'],
+    featured: true,
+  },
+  {
+    id: 'quantecon',
+    name: 'QuantEcon (الاقتصاد القياسي الحوسبي)',
+    repo: 'QuantEcon/QuantEcon.py',
+    url: 'https://github.com/QuantEcon/QuantEcon.py',
+    stars: '1.6k',
+    category: 'computational',
+    categoryLabel: 'النمذجة الرياضية والاقتصاد القياسي',
+    descriptionAr: 'مشروع مفتوح بإشراف نوبل توماس سارجنت وجون ستاتشوريسكي لبرمجة نماذج الاقتصاد الكلي وسلاسل ماركوف والتحكم الأمثل.',
+    descriptionEn: 'Open source library for quantitative economic modeling, dynamic programming, and Markov chains.',
+    innateApplication: 'مرجع المعادلات الرياضية الصارمة لحساب التفضيل الزمني ومسارات استهلاك الفائدة عبر الزمن (الفصل الرابع).',
+    language: 'Python / Numba',
+    tags: ['Computational Economics', 'Time Preferences', 'Macroeconomics', 'Dynamic Programming'],
+    featured: true,
+  },
+  {
+    id: 'lightweight-charts',
+    name: 'TradingView Lightweight Charts',
+    repo: 'tradingview/lightweight-charts',
+    url: 'https://github.com/tradingview/lightweight-charts',
+    stars: '9.2k',
+    category: 'engines',
+    categoryLabel: 'محركات المحاكاة والتصور المالي',
+    descriptionAr: 'محرك مالي فائق السرعة والخفة في المتصفح لرسم تفاعلات الأسعار وتقلبات الأسواق اللحظية بدقة متناهية ودون إبطاء الأداء.',
+    descriptionEn: 'High-performance canvas financial charting library built for fast interactive pricing and candlesticks.',
+    innateApplication: 'مدمج في المنصة لتوليد مسارات الأسعار الحية ومنحنيات العرض والطلب المتغيرة تفاعلياً.',
+    language: 'TypeScript / Canvas',
+    tags: ['Financial Markets', 'Real-time Charting', 'High Performance', 'Zero-bloat'],
+    featured: true,
+  },
+  {
+    id: 'core-econ',
+    name: 'CORE Econ (الاقتصاد الحديث المفتوح)',
+    repo: 'core-econ/the-economy',
+    url: 'https://github.com/core-econ/the-economy',
+    stars: '600+',
+    category: 'computational',
+    categoryLabel: 'النمذجة الرياضية والاقتصاد القياسي',
+    descriptionAr: 'المشروع الأكاديمي الدولي الذي أحدث ثورة في تعليم الاقتصاد من خلال ربط النظريات بمشاكل العالم الحقيقي بدلاً من المعادلات الجافة.',
+    descriptionEn: 'International open-access curriculum reforming economic education with real-world empirical data.',
+    innateApplication: 'إلهام فلسفة «الاقتصاد الفطري» بالانتقال من التجريد الرياضي الجاف إلى المعايشة اليومية للندرة والمقايضة.',
+    language: 'Open Data / Math',
+    tags: ['Curriculum Reform', 'Empirical Economics', 'Open Education', 'Real World'],
+  },
+  {
+    id: 'ncase-polygons',
+    name: 'Parable of the Polygons (أمثولة المضلعات)',
+    repo: 'ncase/polygons',
+    url: 'https://github.com/ncase/polygons',
+    stars: '1.4k',
+    category: 'explorables',
+    categoryLabel: 'شروحات استكشافية ونظرية الألعاب',
+    descriptionAr: 'محاكاة لنموذج شيلينغ (Schelling Model) توضح كيف تؤدي التفضيلات الفردية الميكروسكوبية إلى ظواهر وتكتلات ماكروسكوبية غير متوقعة.',
+    descriptionEn: 'A playable post on how harmless choices can make a harmful world via Schelling segregation dynamics.',
+    innateApplication: 'نمذجة سلوك الجموع وتوزع الباعة والمشترين الفطري في فصل «همسة في السوق» (الفصل الخامس).',
+    language: 'JavaScript / SVG',
+    tags: ['Agent-Based Model', 'Emergence', 'Schelling Model', 'Social Dynamics'],
+  },
+  {
+    id: 'matter-js',
+    name: 'Matter.js Physics Engine',
+    repo: 'liabru/matter-js',
+    url: 'https://github.com/liabru/matter-js',
+    stars: '16.5k',
+    category: 'engines',
+    categoryLabel: 'محركات المحاكاة والتصور المالي',
+    descriptionAr: 'محرك فيزياء ثنائي الأبعاد (2D Rigid Body) مرن وخفيف يوفر استجابات تصادمية وحركية واقعية للأجسام.',
+    descriptionEn: '2D rigid body physics engine for the web providing tactile collision and gravity dynamics.',
+    innateApplication: 'استلهام الملمس الحسي الفطري لحركة العملات النقدية والسلع في الأسواق لإضفاء متعة تفاعلية على القرارات.',
+    language: 'JavaScript',
+    tags: ['Physics', 'Tactile Simulation', 'Collision Engine', '2D Dynamics'],
+  },
+  {
+    id: 'xyflow',
+    name: 'XYFlow / React Flow',
+    repo: 'xyflow/xyflow',
+    url: 'https://github.com/xyflow/xyflow',
+    stars: '26.8k',
+    category: 'engines',
+    categoryLabel: 'محركات المحاكاة والتصور المالي',
+    descriptionAr: 'مكتبة رائدة لبناء المخططات العقدية وشبكات التدفق التفاعلية القابلة للسحب والإفلات وتخصيص المسارات.',
+    descriptionEn: 'Wire your ideas with node-based UIs and interactive flow diagrams for complex network dynamics.',
+    innateApplication: 'تمثيل شبكات التبادل التجاري بين القرى وسلاسل الإمداد ومسارات تدفق السيولة النقدية.',
+    language: 'TypeScript / React',
+    tags: ['Network Graphs', 'Trade Flows', 'Node-based UI', 'Supply Chains'],
+  },
+  {
+    id: 'explorable-explanations',
+    name: 'Explorable Explanations Network',
+    repo: 'explorable-explanations',
+    url: 'https://explorabl.es',
+    stars: 'Hub',
+    category: 'explorables',
+    categoryLabel: 'شروحات استكشافية ونظرية الألعاب',
+    descriptionAr: 'الشبكة العالمية الجامعة للمشاريع التفاعلية القابلة للاستكشاف التي تمكّن المتعلم من التفكير النشط عبر اللعب والمحاكاة.',
+    descriptionEn: 'The global community and hub for active reading and explorable explanations inspired by Bret Victor.',
+    innateApplication: 'الميثاق الفكري والتربوي الذي يحكم تصميم كل تجربة تفاعلية داخل منصة الاقتصاد الفطري.',
+    language: 'Multi-language Hub',
+    tags: ['Explorables', 'Active Reading', 'Bret Victor', 'Intuition First'],
+  },
+];
+---
+
+<BaseLayout
+  title="المستودعات والمصادر المفتوحة | منصة الاقتصاد الفطري"
+  description="دليل المستودعات مفتوحة المصدر الملهمة في الاقتصاد التفاعلي، نظرية الألعاب، النمذجة القياسية الحوسبية، ومحركات المحاكاة البصرية الحديثة."
+>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-12">
+    <!-- Breadcrumb -->
+    <div class="flex items-center justify-between">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-400 hover:text-amber-400 transition-colors group"
+      >
+        <span class="p-1.5 rounded-lg bg-slate-900 border border-slate-800 group-hover:border-amber-500/40 transition-colors">
+          <ArrowLeft class="w-4 h-4 rotate-180" />
+        </span>
+        <span>العودة إلى الفهرس الرئيس</span>
+      </a>
+
+      <div class="flex items-center gap-2">
+        <span class="px-3 py-1 rounded-full text-[11px] font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 flex items-center gap-1.5">
+          <GitBranch class="w-3.5 h-3.5" />
+          <span>المصادر والمستودعات المفتوحة</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Hero Header -->
+    <section class="glass-panel rounded-3xl p-6 sm:p-10 border-slate-800 relative overflow-hidden shadow-2xl">
+      <div class="absolute -top-24 -left-24 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-5">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/20 text-xs font-semibold">
+          <FolderGit2 class="w-4 h-4" />
+          <span>Open Source Ecosystem & Inspirations</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+          المستودعات والمصادر المفتوحة
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-cyan-400 block sm:inline sm:mr-3">
+            الملهمة للمنصة
+          </span>
+        </h1>
+
+        <p class="text-slate-300 text-sm sm:text-base font-light leading-relaxed max-w-3xl">
+          تؤمن منصة «الاقتصاد الفطري» بفضيلة <strong class="text-white font-medium">العلم المفتوح (Open Science)</strong> والمشاركة المجتمعية. هنا نستعرض أهم المستودعات البرمجية والأكاديمية العالمية التي استلهمنا منها المنطق الرياضي، والشروحات الاستكشافية، ومحركات المحاكاة البصرية الفائقة، لتكون مرجعاً مفتوحاً للباحثين والمطورين والطلاب.
+        </p>
+
+        <!-- Stats / Pillars counter -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+          <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80 text-center">
+            <span class="text-xl sm:text-2xl font-bold text-amber-300 block font-mono">8+</span>
+            <span class="text-[11px] text-slate-400">مستودعات مرجعية</span>
+          </div>
+          <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80 text-center">
+            <span class="text-xl sm:text-2xl font-bold text-cyan-300 block font-mono">3</span>
+            <span class="text-[11px] text-slate-400">فئات معرفية وتقنية</span>
+          </div>
+          <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80 text-center">
+            <span class="text-xl sm:text-2xl font-bold text-emerald-300 block font-mono">100%</span>
+            <span class="text-[11px] text-slate-400">مفتوح المصدر وخالٍ من القيود</span>
+          </div>
+          <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80 text-center">
+            <span class="text-xl sm:text-2xl font-bold text-rose-300 block font-mono">MIT/Apache</span>
+            <span class="text-[11px] text-slate-400">تراخيص برمجية حرة</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Navigation Section -->
+    <div class="space-y-12">
+      <!-- Section 1: Explorables & Game Theory -->
+      <section class="space-y-6">
+        <div class="flex items-center gap-3 pb-3 border-b border-slate-800">
+          <div class="p-2.5 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <Compass class="w-5 h-5" />
+          </div>
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-white">
+              1. الشروحات الاستكشافية ونظرية الألعاب (Explorables & Game Theory)
+            </h2>
+            <p class="text-xs text-slate-400">
+              تجارب رائدة تُترجم النظريات السلوكية والتوازنات التنافسية إلى تجارب تفاعلية ملموسة بالمتصفح
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {repositories
+            .filter((r) => r.category === 'explorables')
+            .map((item) => (
+              <div class="glass-panel rounded-2xl p-5 border-slate-800 hover:border-amber-500/40 transition-all flex flex-col justify-between group space-y-4 shadow-lg hover:shadow-amber-500/5">
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-[11px] font-mono text-amber-300 bg-amber-500/10 px-2.5 py-0.5 rounded-lg border border-amber-500/20">
+                      {item.repo}
+                    </span>
+                    <span class="text-xs font-mono text-slate-400 flex items-center gap-1">
+                      <Star class="w-3.5 h-3.5 text-amber-400 fill-amber-400/20" />
+                      {item.stars}
+                    </span>
+                  </div>
+
+                  <h3 class="text-base font-bold text-white group-hover:text-amber-200 transition-colors">
+                    {item.name}
+                  </h3>
+
+                  <p class="text-xs text-slate-300 leading-relaxed font-light">
+                    {item.descriptionAr}
+                  </p>
+
+                  <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80 text-[11px] space-y-1">
+                    <span class="text-amber-400 font-medium block">التطبيق في منصتنا:</span>
+                    <span class="text-slate-400 leading-normal block">
+                      {item.innateApplication}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="space-y-3 pt-2 border-t border-slate-800/80">
+                  <div class="flex flex-wrap gap-1.5">
+                    {item.tags.map((t) => (
+                      <span class="text-[10px] px-2 py-0.5 rounded-md bg-slate-900 text-slate-400 border border-slate-800 font-mono">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center justify-between w-full px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-slate-200 border border-slate-800 hover:border-amber-500 transition-all group/link"
+                  >
+                    <span>معاينة المستودع على GitHub</span>
+                    <ExternalLink class="w-3.5 h-3.5 text-slate-400 group-hover/link:text-slate-950 transition-colors" />
+                  </a>
+                </div>
+              </div>
+            ))}
+        </div>
+      </section>
+
+      <!-- Section 2: Computational Economics -->
+      <section class="space-y-6">
+        <div class="flex items-center gap-3 pb-3 border-b border-slate-800">
+          <div class="p-2.5 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <Cpu class="w-5 h-5" />
+          </div>
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-white">
+              2. الاقتصاد القياسي والحوسبي (Computational & Empirical Economics)
+            </h2>
+            <p class="text-xs text-slate-400">
+              الأطر الأكاديمية العالمية للنمذجة الرياضية الدقيقة، محاكاة السياسات، وسلاسل الاقتصاد الكلي
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {repositories
+            .filter((r) => r.category === 'computational')
+            .map((item) => (
+              <div class="glass-panel rounded-2xl p-6 border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between group space-y-4 shadow-lg hover:shadow-cyan-500/5">
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-[11px] font-mono text-cyan-300 bg-cyan-500/10 px-2.5 py-0.5 rounded-lg border border-cyan-500/20">
+                      {item.repo}
+                    </span>
+                    <span class="text-xs font-mono text-slate-400 flex items-center gap-1">
+                      <Star class="w-3.5 h-3.5 text-amber-400 fill-amber-400/20" />
+                      {item.stars}
+                    </span>
+                  </div>
+
+                  <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-cyan-200 transition-colors">
+                    {item.name}
+                  </h3>
+
+                  <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
+                    {item.descriptionAr}
+                  </p>
+
+                  <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/80 text-xs space-y-1">
+                    <span class="text-cyan-400 font-medium block">التطبيق في منصتنا:</span>
+                    <span class="text-slate-400 leading-normal block">
+                      {item.innateApplication}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="space-y-3 pt-2 border-t border-slate-800/80">
+                  <div class="flex flex-wrap gap-1.5">
+                    {item.tags.map((t) => (
+                      <span class="text-[10px] px-2 py-0.5 rounded-md bg-slate-900 text-slate-400 border border-slate-800 font-mono">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl text-xs font-semibold bg-cyan-950/60 hover:bg-cyan-500 hover:text-slate-950 text-cyan-200 border border-cyan-800/50 hover:border-cyan-500 transition-all group/link"
+                  >
+                    <span>فتح المستودع الأكاديمي</span>
+                    <ExternalLink class="w-3.5 h-3.5 text-cyan-400 group-hover/link:text-slate-950 transition-colors" />
+                  </a>
+                </div>
+              </div>
+            ))}
+        </div>
+      </section>
+
+      <!-- Section 3: Simulation & Visualization Engines -->
+      <section class="space-y-6">
+        <div class="flex items-center gap-3 pb-3 border-b border-slate-800">
+          <div class="p-2.5 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <LineChart class="w-5 h-5" />
+          </div>
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-white">
+              3. محركات المحاكاة والتصور المالي البصري (Simulation & Visualization Engines)
+            </h2>
+            <p class="text-xs text-slate-400">
+              حزم ومكتبات مفتوحة المصدر تمنح واجهات المحاكاة سرعة حوسبية، شبكات عقدية، وفيزياء حسية واقعية
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {repositories
+            .filter((r) => r.category === 'engines')
+            .map((item) => (
+              <div class="glass-panel rounded-2xl p-5 border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col justify-between group space-y-4 shadow-lg hover:shadow-emerald-500/5">
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-[11px] font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-lg border border-emerald-500/20">
+                      {item.repo}
+                    </span>
+                    <span class="text-xs font-mono text-slate-400 flex items-center gap-1">
+                      <Star class="w-3.5 h-3.5 text-amber-400 fill-amber-400/20" />
+                      {item.stars}
+                    </span>
+                  </div>
+
+                  <h3 class="text-base font-bold text-white group-hover:text-emerald-200 transition-colors">
+                    {item.name}
+                  </h3>
+
+                  <p class="text-xs text-slate-300 leading-relaxed font-light">
+                    {item.descriptionAr}
+                  </p>
+
+                  <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80 text-[11px] space-y-1">
+                    <span class="text-emerald-400 font-medium block">التطبيق في منصتنا:</span>
+                    <span class="text-slate-400 leading-normal block">
+                      {item.innateApplication}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="space-y-3 pt-2 border-t border-slate-800/80">
+                  <div class="flex flex-wrap gap-1.5">
+                    {item.tags.map((t) => (
+                      <span class="text-[10px] px-2 py-0.5 rounded-md bg-slate-900 text-slate-400 border border-slate-800 font-mono">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center justify-between w-full px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-emerald-500 hover:text-slate-950 text-slate-200 border border-slate-800 hover:border-emerald-500 transition-all group/link"
+                  >
+                    <span>استكشاف الحزمة البرمجية</span>
+                    <ExternalLink class="w-3.5 h-3.5 text-slate-400 group-hover/link:text-slate-950 transition-colors" />
+                  </a>
+                </div>
+              </div>
+            ))}
+        </div>
+      </section>
+    </div>
+
+    <!-- How Innate Economics Integrates With Them -->
+    <section class="bg-gradient-to-br from-slate-900/90 via-slate-950 to-amber-950/30 border border-amber-500/20 rounded-3xl p-6 sm:p-10 space-y-6 shadow-2xl">
+      <div class="flex items-center gap-2.5 text-amber-400 text-xs font-semibold uppercase tracking-wider">
+        <Sparkles class="w-4 h-4" />
+        <span>التكامل المعماري والمنهجي</span>
+      </div>
+
+      <h2 class="text-xl sm:text-2xl font-bold text-white">
+        كيف تنصهر هذه المستودعات في تجربة المتعلم؟
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <span class="w-7 h-7 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold font-mono text-xs">
+            01
+          </span>
+          <h4 class="text-white font-bold text-sm">عزل المحرك الرياضي</h4>
+          <p class="text-slate-400 leading-relaxed font-light text-xs">
+            استلهاماً من QuantEcon، تُبنى جميع محركات المنصة في <code class="text-amber-300 font-mono">src/engine/</code> كدوال رياضية نقية (Pure Functions) قابلة للاختبار المعزول بنسبة 100%.
+          </p>
+        </div>
+
+        <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <span class="w-7 h-7 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-bold font-mono text-xs">
+            02
+          </span>
+          <h4 class="text-white font-bold text-sm">التغذية الحسية والفطرية</h4>
+          <p class="text-slate-400 leading-relaxed font-light text-xs">
+            استلهاماً من مشاريع Nicky Case و Matter.js، نوفر استجابة صوتية فورية من خلال Web Audio API ومؤثرات حركية تمنح القرارات وزناً فيزيائياً ملموساً.
+          </p>
+        </div>
+
+        <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <span class="w-7 h-7 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold font-mono text-xs">
+            03
+          </span>
+          <h4 class="text-white font-bold text-sm">توازن ناش وحرب الأسعار</h4>
+          <p class="text-slate-400 leading-relaxed font-light text-xs">
+            تطبيق خوارزميات الذكاء الاصطناعي لاستراتيجيات معضلة السجينين (Tit for Tat، Grim Trigger، Greed) لاختبار متانة التعاون البشري في الأسواق.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contribute to Open Source Banner -->
+    <section class="glass-panel border-cyan-500/30 rounded-3xl p-6 sm:p-10 text-center space-y-4">
+      <h3 class="text-lg sm:text-xl font-bold text-white">
+        هل تود المساهمة أو اقتراح مستودع مفيد؟
+      </h3>
+      <p class="text-slate-300 text-xs sm:text-sm font-light max-w-xl mx-auto leading-relaxed">
+        منصة «الاقتصاد الفطري» مشروع مفتوح المصدر بالكامل يرحب بمساهمات الباحثين والمطورين، سواء بإضافة فصول ومحاكاة جديدة، أو تحسين الخوارزميات، أو اقتراح مستودعات ملهمة.
+      </p>
+      <div class="pt-2">
+        <a
+          href="https://github.com/Yahya0071/Innate-Economics"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white font-semibold text-xs shadow-lg shadow-cyan-950 transition-all"
+        >
+          <FolderGit2 class="w-4 h-4" />
+          <span>المساهمة في مستودع المنصة على GitHub</span>
+          <ExternalLink class="w-3.5 h-3.5" />
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

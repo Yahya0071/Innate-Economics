@@ -13,6 +13,8 @@ import {
   Cpu,
   Layers,
   Zap,
+  FolderGit2,
+  ExternalLink,
 } from 'lucide-react';
 import { RoughHighlight } from '../components/RoughHighlight';
 
@@ -302,6 +304,31 @@ const FOUR_LOOPS = [
           </p>
         </div>
       </div>
+    </div>
+
+    <!-- Open Source Repositories Banner -->
+    <div class="mt-8 p-6 rounded-3xl bg-gradient-to-r from-amber-500/10 via-slate-900 to-cyan-500/10 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5 text-right">
+        <div class="p-3 rounded-2xl bg-slate-900 border border-slate-700 text-amber-400 shrink-0">
+          <FolderGit2 class="w-6 h-6" />
+        </div>
+        <div>
+          <h4 class="text-sm sm:text-base font-bold text-white">
+            المستودعات والمصادر المفتوحة الملهمة للمنصة
+          </h4>
+          <p class="text-xs text-slate-400">
+            استكشف كنز الأكواد المفتوحة في نظرية الألعاب، والنمذجة القياسية الحوسبية، ومحركات المحاكاة البصرية.
+          </p>
+        </div>
+      </div>
+
+      <a
+        href="/resources"
+        class="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-md transition-colors"
+      >
+        <span>استعراض المستودعات</span>
+        <ArrowLeft class="w-3.5 h-3.5" />
+      </a>
     </div>
   </section>
 </BaseLayout>
