@@ -1,5 +1,5 @@
 ---
-import { Compass, BookOpen, GitBranch, Sparkles, User } from 'lucide-react';
+import { BookOpen, Sparkles, User } from 'lucide-react';
 
 import { AudioToggle } from './AudioToggle';
 import { SearchModal } from './SearchModal';
@@ -16,8 +16,8 @@ const { currentChapter = 'الفصل الأول' } = Astro.props;
   <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
     <!-- Brand -->
     <a href="/" class="flex items-center gap-3 group">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-        <Compass class="w-5 h-5 text-slate-950" />
+      <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl p-1 bg-slate-900 border border-amber-500/30 flex items-center justify-center shadow-lg shadow-amber-950/20 group-hover:scale-105 group-hover:border-amber-400/60 transition-all duration-300">
+        <img src="/logo.svg" alt="شعار الاقتصاد الفطري" class="w-full h-full rounded-xl object-contain" />
       </div>
       <div>
         <span class="text-lg sm:text-xl font-bold tracking-tight text-white block group-hover:text-amber-300 transition-colors">
