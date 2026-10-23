@@ -2,12 +2,14 @@
 import { Compass, BookOpen, GitBranch, Sparkles } from 'lucide-react';
 
 import { AudioToggle } from './AudioToggle';
+import { SearchModal } from './SearchModal';
 
 interface Props {
   currentChapter?: string;
 }
 
 const { currentChapter = 'الفصل الأول' } = Astro.props;
+
 ---
 
 <header class="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
@@ -42,6 +44,7 @@ const { currentChapter = 'الفصل الأول' } = Astro.props;
         <span>{currentChapter}</span>
       </div>
 
+      <SearchModal client:load />
       <AudioToggle client:load />
     </div>
   </div>

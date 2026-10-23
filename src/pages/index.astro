@@ -13,6 +13,8 @@ import {
   Cpu,
   Layers,
 } from 'lucide-react';
+import { RoughHighlight } from '../components/RoughHighlight';
+
 
 const CHAPTERS = [
   {
@@ -118,8 +120,10 @@ const FOUR_LOOPS = [
 
     <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-tight sm:leading-none mb-6">
       الاقتصاد كما ينبغي أن تفهمه: <br />
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200">
-        بفطرتك.. لا بكتب النظريات
+      <span class="text-amber-300">
+        <RoughHighlight client:load type="underline" color="#f59e0b" strokeWidth={3}>
+          بفطرتك.. لا بكتب النظريات
+        </RoughHighlight>
       </span>
     </h1>
 

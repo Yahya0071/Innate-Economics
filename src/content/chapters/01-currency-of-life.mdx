@@ -14,11 +14,12 @@ import { ConsequenceAlert } from '../../components/narrative/ConsequenceAlert';
 import { InsightBox } from '../../components/narrative/InsightBox';
 import { MarginalYieldCurve } from '../../components/simulations/MarginalYieldCurve';
 import { TimeBudgetSimulation } from '../../components/simulations/TimeBudgetSimulation';
+import { RoughHighlight } from '../../components/RoughHighlight';
 
 # ميزانية نبضات اليوم
 
 <p className="text-xl sm:text-2xl text-slate-300 font-light leading-relaxed my-6">
-  قبل أن توجد البنوك، وقبل أن تُسكّ أول عملة معدنية على وجه البسيطة، كان لدى كل إنسان على وجه الأرض خزانة واحدة لا يملك غيرها: **16 ساعة يقظة كل يوم**.
+  قبل أن توجد البنوك، وقبل أن تُسكّ أول عملة معدنية على وجه البسيطة، كان لدى كل إنسان على وجه الأرض خزانة واحدة لا يملك غيرها: <RoughHighlight client:load type="underline" color="#f59e0b">16 ساعة يقظة كل يوم</RoughHighlight>.
 </p>
 
 ---
@@ -77,17 +78,20 @@ import { TimeBudgetSimulation } from '../../components/simulations/TimeBudgetSim
     {
       arabic: "تكلفة الفرصة البديلة",
       english: "Opportunity Cost",
-      definition: "القيمة أو المنفعة التي تضحي بها باختيارك عملاً معيناً بدلاً من أفضل خيار بديل (كل ساعة تعمل فيها كسباً مباشراً هي ساعة تضحي بها من بناء الأداة أو الراحة)."
+      definition: "القيمة أو المنفعة التي تضحي بها باختيارك عملاً معيناً بدلاً من أفضل خيار بديل (كل ساعة تعمل فيها كسباً مباشراً هي ساعة تضحي بها من بناء الأداة أو الراحة).",
+      formula: "OC = \\max(U_{\\text{alternative}}) - U_{\\text{chosen}}"
     },
     {
       arabic: "تناقص العائد الحدي",
       english: "Diminishing Marginal Returns",
-      definition: "القانون الذي ينص على أن إضافة وحدات متتالية من عنصر إنتاجي (مثل ساعات العمل) تؤدي في النهاية إلى الحصول على زيادات متناقصة تدريجياً في الناتج الإجمالي."
+      definition: "القانون الذي ينص على أن إضافة وحدات متتالية من عنصر إنتاجي (مثل ساعات العمل) تؤدي في النهاية إلى الحصول على زيادات متناقصة تدريجياً في الناتج الإجمالي.",
+      formula: "MP_L = \\frac{\\partial Y}{\\partial L} < 0 \\quad (\\text{for } L > L^*)"
     },
     {
       arabic: "تراكم رأس المال",
       english: "Capital Accumulation",
-      definition: "استثمار جزء من موارد اليوم لإنتاج وسائل وأدوات إنتاجية ترفع من القدرة الإنتاجية وكفاءة العمل في المستقبل."
+      definition: "استثمار جزء من موارد اليوم لإنتاج وسائل وأدوات إنتاجية ترفع من القدرة الإنتاجية وكفاءة العمل في المستقبل.",
+      formula: "K_{t+1} = (1 - \\delta)K_t + I_t"
     }
   ]}
 />

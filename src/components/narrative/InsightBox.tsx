@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Lightbulb, BookOpen, ChevronDown, ChevronUp } from 'lucide-react';
+import katex from 'katex';
 
 interface AcademicTerm {
   arabic: string;
   english: string;
   definition: string;
+  formula?: string;
 }
+
 
 interface InsightBoxProps {
   id?: string;
@@ -61,10 +64,27 @@ export const InsightBox: React.FC<InsightBoxProps> = ({
           {showAcademic && (
             <div className="mt-4 space-y-3 bg-slate-950/60 rounded-xl p-4 border border-slate-800/80 animate-fadeIn">
               {academicTerms.map((term, idx) => (
-                <div key={idx} className="text-xs sm:text-sm">
-                  <span className="font-bold text-cyan-300 ml-1.5">{term.arabic}</span>
-                  <span className="text-slate-500 font-mono ml-2">({term.english})</span>
+                <div key={idx} className="text-xs sm:text-sm bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                  <div className="flex items-center justify-between mb-1">
+                    <div>
+                      <span className="font-bold text-cyan-300 ml-1.5">{term.arabic}</span>
+                      <span className="text-slate-500 font-mono">({term.english})</span>
+                    </div>
+                  </div>
                   <p className="text-slate-400 mt-0.5 leading-relaxed">{term.definition}</p>
+                  {term.formula && (
+                    <div className="mt-2 pt-2 border-t border-slate-800/80 overflow-x-auto text-left" dir="ltr">
+                      <div
+                        className="text-amber-200 text-xs sm:text-sm inline-block"
+                        dangerouslySetInnerHTML={{
+                          __html: katex.renderToString(term.formula, {
+                            throwOnError: false,
+                            displayMode: true,
+                          }),
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

@@ -187,3 +187,34 @@ export function playWarningThud() {
     osc.stop(now + 0.22);
   } catch {}
 }
+
+/**
+ * Generic soft tone for UI clicks or navigation.
+ */
+export function playTone(freq = 440, duration = 0.05) {
+  if (isSoundMuted()) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  try {
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, now);
+
+    gain.gain.setValueAtTime(0.04, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + duration);
+  } catch {}
+}
+
+export const playTick = playTactileTick;
+export const playCoin = playCoinChime;
+
