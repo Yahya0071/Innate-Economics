@@ -316,11 +316,15 @@ export const TimeBudgetSimulation: React.FC = () => {
           </div>
           <div className="flex items-center justify-between text-xs text-slate-400 mt-2 pt-2 border-t border-slate-800/80">
             <span>استهلاك الليلة الحتمي:</span>
-            <span className="text-rose-400 font-mono">-{DAILY_FOOD_REQUIREMENT} وحدات</span>
+            <span className="text-rose-400 font-mono">
+              <span className="num-ltr">-{DAILY_FOOD_REQUIREMENT}</span> <span className="text-slate-400">وحدات</span>
+            </span>
           </div>
           <div className="flex items-center justify-between text-xs text-slate-400 mt-1">
             <span>حصاد اليوم المتوقع:</span>
-            <span className="text-emerald-400 font-mono">+{previewHarvest} وحدة</span>
+            <span className="text-emerald-400 font-mono">
+              <span className="num-ltr">+{previewHarvest}</span> <span className="text-slate-400">وحدة</span>
+            </span>
           </div>
         </div>
 
@@ -332,7 +336,7 @@ export const TimeBudgetSimulation: React.FC = () => {
               أداة الغد (رأس المال)
             </span>
             <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-              {currentToolConfig.multiplier}x مضاعف
+              <span className="num-ltr">{currentToolConfig.multiplier}x</span> <span>مضاعف</span>
             </span>
           </div>
           <div className="text-sm font-bold text-slate-200 mt-1">
@@ -345,8 +349,8 @@ export const TimeBudgetSimulation: React.FC = () => {
             />
           </div>
           <div className="flex justify-between items-center text-[11px] text-slate-500 mt-1.5">
-            <span>اكتمال الرتبة: {progressPercent}%</span>
-            <span>مجموع ساعات الاستثمار: {state.toolHoursInvested} س</span>
+            <span>اكتمال الرتبة: <span className="num-ltr">{progressPercent}%</span></span>
+            <span>مجموع ساعات الاستثمار: <span className="num-ltr">{state.toolHoursInvested}</span> س</span>
           </div>
         </div>
       </div>
@@ -382,8 +386,9 @@ export const TimeBudgetSimulation: React.FC = () => {
             <Clock className="w-4 h-4 text-amber-400" />
             توزيع ساعات اليقظة الـ 16 لهذا اليوم:
           </span>
-          <span className="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-md border border-slate-800">
-            {allocation.workHours + allocation.toolHours + allocation.restHours} / 16 ساعة
+          <span className="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-md border border-slate-800 flex items-center gap-1">
+            <span className="num-ltr text-slate-200">{allocation.workHours + allocation.toolHours + allocation.restHours} / 16</span>
+            <span>ساعة</span>
           </span>
         </div>
 
