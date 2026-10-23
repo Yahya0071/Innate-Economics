@@ -13,7 +13,6 @@ import {
   Cpu,
   Layers,
   Zap,
-  FolderGit2,
   ExternalLink,
   FlaskConical,
 } from 'lucide-react';
@@ -307,57 +306,32 @@ const FOUR_LOOPS = [
       </div>
     </div>
 
-    <!-- Interactive Labs & Ecosystem Dual Banners -->
-    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-      {/* Sandbox Banner */}
-      <div class="p-6 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-slate-900 to-slate-950 border border-emerald-500/30 flex flex-col justify-between gap-4">
-        <div class="flex items-start gap-3.5 text-right">
-          <div class="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
-            <FlaskConical class="w-6 h-6" />
-          </div>
-          <div>
-            <h4 class="text-sm sm:text-base font-bold text-white mb-1">
-              المخبر الاقتصادي الحر (Sandbox Mode)
-            </h4>
-            <p class="text-xs text-slate-400 leading-relaxed font-light">
-              اختبر محاكاة الوكلاء وقانون باريتو (80/20)، حرّك منحنيات العرض والطلب باللمس عبر Mafs، وأصدر جواز سفرك الاقتصادي.
-            </p>
-          </div>
+    <!-- Interactive Sandbox Callout Banner -->
+    <div class="mt-8 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-500/10 via-slate-900 to-cyan-500/10 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl">
+      <div class="flex items-center gap-4 text-right">
+        <div class="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shrink-0">
+          <FlaskConical class="w-8 h-8" />
         </div>
-
-        <a
-          href="/sandbox"
-          class="inline-flex items-center justify-between px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition-colors"
-        >
-          <span>دخول المخبر التجريبي</span>
-          <ArrowLeft class="w-3.5 h-3.5" />
-        </a>
+        <div>
+          <span class="text-[11px] font-semibold text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 mb-1 inline-block">
+            بيئة تفاعلية حرة (Sandbox Mode)
+          </span>
+          <h4 class="text-base sm:text-lg font-bold text-white mb-1">
+            المخبر الاقتصادي الحر: محاكاة الوكلاء وتحريك المنحنيات
+          </h4>
+          <p class="text-xs text-slate-300 leading-relaxed font-light max-w-xl">
+            اختبر محاكاة تفاوت الثروة التلقائي بين 60 وكيلاً ذكياً (قانون باريتو 80/20)، حرّك منحنيات العرض والطلب باللمس والسحب عبر Mafs، وأصدر جواز سفرك الاقتصادي الرسمي.
+          </p>
+        </div>
       </div>
 
-      {/* Repositories Banner */}
-      <div class="p-6 rounded-3xl bg-gradient-to-br from-amber-500/10 via-slate-900 to-slate-950 border border-slate-800 flex flex-col justify-between gap-4">
-        <div class="flex items-start gap-3.5 text-right">
-          <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">
-            <FolderGit2 class="w-6 h-6" />
-          </div>
-          <div>
-            <h4 class="text-sm sm:text-base font-bold text-white mb-1">
-              المستودعات والمصادر المفتوحة
-            </h4>
-            <p class="text-xs text-slate-400 leading-relaxed font-light">
-              استكشف المشاريع البرمجية والأكاديمية العالمية في نظرية الألعاب، النمذجة القياسية الحوسبية، ومحركات المحاكاة.
-            </p>
-          </div>
-        </div>
-
-        <a
-          href="/resources"
-          class="inline-flex items-center justify-between px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-amber-400 hover:text-slate-950 text-slate-200 border border-slate-700 hover:border-amber-400 font-bold text-xs shadow-md transition-all"
-        >
-          <span>استعراض كنز المستودعات</span>
-          <ArrowLeft class="w-3.5 h-3.5" />
-        </a>
-      </div>
+      <a
+        href="/sandbox"
+        class="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 cursor-pointer"
+      >
+        <span>دخول المخبر التجريبي</span>
+        <ArrowLeft class="w-4 h-4" />
+      </a>
     </div>
   </section>
 </BaseLayout>

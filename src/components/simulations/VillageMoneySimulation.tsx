@@ -24,10 +24,17 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { playCoinChime, playTactileTick, playWarningThud, playSuccessChime } from '../../utils/audio';
+import { TradingViewPriceChart } from '../charts/TradingViewPriceChart';
+import { PhysicsCoinVault } from '../physics/PhysicsCoinVault';
 
 export const VillageMoneySimulation: React.FC = () => {
   const [state, setState] = useState<VillageMarketState>(() => createInitialVillageState());
   const [copiedLink, setCopiedLink] = useState(false);
+  const [priceHistory, setPriceHistory] = useState<Array<{ time: string; value: number }>>([
+    { time: '2026-01-01', value: 1.0 },
+    { time: '2026-01-02', value: 1.0 },
+    { time: '2026-01-03', value: 1.0 },
+  ]);
 
   // Read URL query params if present
   useEffect(() => {
@@ -55,6 +62,18 @@ export const VillageMoneySimulation: React.FC = () => {
   }, []);
 
   const outcome = evaluateMarketDay(state);
+
+  // Record price trajectory for TradingView charts
+  useEffect(() => {
+    setPriceHistory((prev) => {
+      const nextDay = prev.length + 1;
+      const dayStr = nextDay < 10 ? `0${nextDay}` : `${nextDay}`;
+      const nextTime = nextDay <= 28 ? `2026-01-${dayStr}` : `2026-02-0${(nextDay % 28) + 1}`;
+      const last = prev[prev.length - 1];
+      if (last && Math.abs(last.value - outcome.officialPrice) < 0.01) return prev;
+      return [...prev.slice(-30), { time: nextTime, value: outcome.officialPrice }];
+    });
+  }, [outcome.officialPrice]);
 
   const handleGoldChange = (val: number) => {
     setState((prev) => ({ ...prev, goldSupply: Math.max(10, val) }));
@@ -353,6 +372,19 @@ export const VillageMoneySimulation: React.FC = () => {
             />
           </div>
         </div>
+      </div>
+
+      {/* Live Financial Charting (TradingView) & 2D Physics Coin Vault (Matter.js) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 my-6">
+        <TradingViewPriceChart
+          data={priceHistory}
+          title="مخطط أسعار الخبز اللحظي (TradingView Lightweight Charts)"
+          height={240}
+        />
+        <PhysicsCoinVault
+          initialCoins={Math.min(60, Math.max(10, Math.round(state.goldSupply / 3)))}
+          label="خزينة الذهب الفيزيائية المباشرة (Matter.js Physics)"
+        />
       </div>
 
       {/* Visual Queue & Village Street Simulation */}

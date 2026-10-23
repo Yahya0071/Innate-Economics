@@ -250,7 +250,7 @@ Economics/
 | **XYFlow / React Flow** | [`xyflow/xyflow`](https://github.com/xyflow/xyflow) | شبكات التبادل وسلاسل التوريد | محاكاة شبكات التداول المعقدة وتدفق السيولة والائتمان بين القرى. |
 | **Explorable Explanations** | [`explorabl.es`](https://explorabl.es) | حركة التعليم النشط والتفاعلي | الميثاق الإرشادي التربوي والبصري الذي تنتهجه المنصة في كافة تجاربها. |
 
-يمكن تصفح الدليل التفاعلي الكامل لهذه المستودعات مباشرة داخل المنصة عبر المسار المخصص: [`/resources`](https://github.com/Yahya0071/Innate-Economics/blob/main/src/pages/resources.astro).
+كافة هذه المحركات والمكتبات مدمجة ومفعلة حياً داخل فصول المنصة وفي المخبر التجريبي الحر: [`/sandbox`](https://github.com/Yahya0071/Innate-Economics/blob/main/src/pages/sandbox.astro).
 
 ---
 
