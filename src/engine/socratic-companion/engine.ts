@@ -28,6 +28,61 @@ export function normalizeArabic(text: string): string {
 }
 
 /**
+ * Common Arabic stopwords that should not trigger false-positive keyword matches
+ */
+export const ARABIC_STOPWORDS = new Set([
+  'ما', 'ماذا', 'هل', 'في', 'من', 'عن', 'على', 'الي', 'الى', 'هو', 'هي', 'هم', 'هن',
+  'ان', 'انما', 'كان', 'كانت', 'مع', 'هذا', 'هذه', 'هؤلاء', 'ذلك', 'تلك', 'كم', 'لو',
+  'او', 'ثم', 'حتى', 'كل', 'غير', 'بين', 'قد', 'لا', 'لم', 'لن', 'اي', 'كيف', 'لماذا',
+  'التي', 'الذي', 'الذين', 'اللواتي', 'هناك', 'عند', 'عندما', 'اذا', 'فقد', 'لقد'
+]);
+
+/**
+ * Strips Arabic definite articles ('ال') and proclitics ('و', 'ف', 'ب', 'ل', 'ك')
+ * ensuring remaining stem has meaningful length.
+ */
+export function stripArabicPrefix(word: string): string {
+  if (!word || word.length < 3) return word;
+
+  // Compound proclitics with definite article (وال، بال، فال، كال، لل)
+  if (word.length >= 5) {
+    if (word.startsWith('وال') || word.startsWith('بال') || word.startsWith('فال') || word.startsWith('كال')) {
+      return word.slice(3);
+    }
+  }
+  if (word.length >= 4 && word.startsWith('لل')) {
+    return word.slice(2);
+  }
+
+  // Definite article (ال)
+  if (word.length >= 4 && word.startsWith('ال')) {
+    return word.slice(2);
+  }
+
+  // Single letter proclitics (و, ف, ب, ل) - preserve if stem has at least 3 letters
+  if (word.length >= 4 && (word.startsWith('و') || word.startsWith('ف') || word.startsWith('ب') || word.startsWith('ل'))) {
+    return word.slice(1);
+  }
+
+  return word;
+}
+
+/**
+ * Resilient bi-directional and stem-aware Arabic token matching
+ */
+export function matchesArabicToken(target: string, token: string): boolean {
+  if (!target || !token) return false;
+  if (target.includes(token) || token.includes(target)) return true;
+
+  const stemTarget = stripArabicPrefix(target);
+  const stemToken = stripArabicPrefix(token);
+  if (stemTarget.length >= 2 && stemToken.length >= 2) {
+    if (stemTarget.includes(stemToken) || stemToken.includes(stemTarget)) return true;
+  }
+  return false;
+}
+
+/**
  * Detect page context from the current pathname
  */
 export function detectContext(pathname: string): PageContext {
@@ -54,24 +109,24 @@ export function detectContext(pathname: string): PageContext {
     let num = 1;
     let title = 'الفصل التفاعلي';
 
-    if (slug.includes('1-currency-of-life')) {
+    if (slug.includes('currency-of-life')) {
       num = 1;
       title = 'التجربة 1: ميزانية نبضات اليوم';
-    } else if (slug.includes('2-bread-and-gold')) {
+    } else if (slug.includes('bread-and-gold')) {
       num = 2;
       title = 'التجربة 2: جزيرة الرغيف والذهب';
-    } else if (slug.includes('3-common-pasture')) {
+    } else if (slug.includes('common-pasture')) {
       num = 3;
       title = 'التجربة 3: لغز المرعى المشترك';
-    } else if (slug.includes('4-borrowing-tomorrow')) {
+    } else if (slug.includes('borrowing-tomorrow')) {
       num = 4;
-      title = 'التجربة 4: اقتراض الغد وسحر الفائدة';
-    } else if (slug.includes('5-whisper-in-the-market')) {
+      title = 'التجربة 4: استعارة طاقة الغد';
+    } else if (slug.includes('whisper-in-the-market')) {
       num = 5;
-      title = 'التجربة 5: همسة في السوق وإشارات الأسعار';
-    } else if (slug.includes('6-price-war')) {
+      title = 'التجربة 5: همسة في السوق';
+    } else if (slug.includes('price-war')) {
       num = 6;
-      title = 'التجربة 6: حرب الأسعار ومفارقة برتراند';
+      title = 'التجربة 6: لغز حرب الأسعار وحصار الربح';
     }
 
     return {
@@ -127,12 +182,21 @@ export function getChallengesForContext(context: PageContext): FlashChallenge[] 
 
 /**
  * Resilient multi-keyword search in the Knowledge Base
+ * Filters stopwords, normalizes definite articles, and supports bi-directional token matching.
  */
-export function searchKnowledge(query: string): KnowledgeEntry[] {
+export function searchKnowledge(query: string, returnDefaultsIfEmpty: boolean = false): KnowledgeEntry[] {
   const normQuery = normalizeArabic(query);
-  if (!normQuery) return KNOWLEDGE_BASE.slice(0, 4);
+  if (!normQuery) {
+    return returnDefaultsIfEmpty ? KNOWLEDGE_BASE.slice(0, 4) : [];
+  }
 
-  const queryTokens = normQuery.split(' ').filter((t) => t.length > 1);
+  const rawTokens = normQuery.split(' ').filter((t) => t.length > 1);
+  const queryTokens = rawTokens.filter((t) => !ARABIC_STOPWORDS.has(t));
+
+  // If query was composed solely of stopwords, return empty results (prevent stopword noise)
+  if (queryTokens.length === 0) {
+    return [];
+  }
 
   const scored = KNOWLEDGE_BASE.map((entry) => {
     let score = 0;
@@ -145,10 +209,21 @@ export function searchKnowledge(query: string): KnowledgeEntry[] {
     if (normQuestion.includes(normQuery)) score += 50;
 
     for (const token of queryTokens) {
-      if (normKeywords.some((k) => k.includes(token))) score += 20;
-      if (normQuestion.includes(token)) score += 15;
-      if (normQuick.includes(token)) score += 8;
-      if (normDeep.includes(token)) score += 4;
+      const stemToken = stripArabicPrefix(token);
+
+      // Bi-directional and stem keyword matching
+      if (normKeywords.some((k) => matchesArabicToken(k, token))) {
+        score += 20;
+      }
+      if (normQuestion.includes(token) || (stemToken.length >= 3 && normQuestion.includes(stemToken))) {
+        score += 15;
+      }
+      if (normQuick.includes(token) || (stemToken.length >= 3 && normQuick.includes(stemToken))) {
+        score += 8;
+      }
+      if (normDeep.includes(token) || (stemToken.length >= 3 && normDeep.includes(stemToken))) {
+        score += 4;
+      }
     }
 
     return { entry, score };
@@ -174,7 +249,18 @@ export function askSocraticAgent(
   suggestedAction?: string;
 } {
   const persona = getPersona(personaId);
-  const results = searchKnowledge(query);
+  const trimmed = query ? query.trim() : '';
+
+  // Guard against empty query or whitespace
+  if (!trimmed || !normalizeArabic(trimmed)) {
+    return {
+      response: `اطرح عليّ أي تساؤل يدور في ذهنك يا صديقي! سأجيبك من منظور فكري واقتصادي عميق.`,
+      personaQuote: persona.perspectiveSummary,
+      suggestedAction: 'اكتب سؤالك في خانة البحث أو اختر أحد الأسئلة المقترحة.',
+    };
+  }
+
+  const results = searchKnowledge(trimmed);
 
   if (results.length > 0) {
     const best = results[0];

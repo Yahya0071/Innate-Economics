@@ -5,7 +5,7 @@
 [![Astro](https://img.shields.io/badge/Astro-5.x-BC52EE?style=flat-square&logo=astro&logoColor=white)](https://astro.build)
 [![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![Chapters](https://img.shields.io/badge/Chapters-6_Interactive_Modules-F59E0B?style=flat-square)](https://innate-economics.pages.dev/)
-[![Vitest](https://img.shields.io/badge/Vitest-48_Tests_Passed-6E9F18?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev)
+[![Vitest](https://img.shields.io/badge/Vitest-75_Tests_Passed-6E9F18?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict_Mode-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![PWA](https://img.shields.io/badge/PWA-Offline_Ready-FF5722?style=flat-square&logo=pwa&logoColor=white)](https://vite-pwa-org.netlify.app/)
 
@@ -139,22 +139,31 @@ Economics/
 │   └── 06-price-war.spec.md         # مواصفات الفصل 6 (حرب الأسعار وتوازن ناش)
 ├── src/
 │   ├── engine/                      # محركات المحاكاة الصرفة (Pure TypeScript - Zero UI)
-│   │   ├── core/                    # المحركات المشتركة: الرياضيات، الصوت التوليدي، وحساب الأنماط
+│   │   ├── core/                    # المحركات المشتركة: الرياضيات، الصوت التوليدي، جسر الأحداث، وحساب الأنماط
 │   │   │   ├── math.ts
 │   │   │   ├── audio.ts             # Web Audio API Micro-Synthesizer
-│   │   │   └── archetypes.ts        # تصنيف الأنماط وتشفير الروابط
+│   │   │   ├── archetypes.ts        # تصنيف الأنماط، تشفير الروابط، وفحص المدخلات
+│   │   │   └── eventBridge.ts       # جسر الأحداث التفاعلي وجدولة التحديثات بين الجزر
 │   │   ├── time-budget/             # محرك ميزانية الوقت ورأس المال
 │   │   ├── village-money/           # محرك تداول الذهب والخبز والتسعير
 │   │   ├── common-pasture/          # محرك استنزاف وتجدد المرعى
 │   │   ├── borrowing-tomorrow/      # محرك الائتمان ومضاعف الري
 │   │   ├── whisper-market/          # محرك الاحتياطي الجزئي والهلع المصرفي
-│   │   └── price-war/               # محرك حرب الأسعار وتوازن ناش
+│   │   ├── price-war/               # محرك حرب الأسعار وتوازن ناش
+│   │   ├── agent-economy/           # محرك تبادل الوكلاء، توزيع باريتو، وزكاة الثروة
+│   │   └── socratic-companion/      # محرك الرفيق السقراطي المعرفي والشخصيات التراثية
+│   │       ├── engine.ts            # البحث العربي المرن والمحاورة السقراطية
+│   │       ├── personas.ts          # شخصيات الحوار (ابن خلدون، آدم سميث، كينز، أبو الفطرة)
+│   │       ├── dilemmas.ts          # المآزق السقراطية الميدانية
+│   │       ├── challenges.ts        # تحديات التفكير الفطري السريعة
+│   │       └── knowledge.ts         # قاعدة المعرفة الاقتصادية الفطرية
 │   ├── components/
 │   │   ├── Header.astro             # شريط الملاحة والبحث والتحكم بالصوت
 │   │   ├── AudioToggle.tsx          # زر كتم وتفعيل الصوت الفطري
 │   │   ├── SearchModal.tsx          # نافذة البحث الفوري (Pagefind)
+│   │   ├── socratic/                # نافذة الرفيق السقراطي التفاعلي
 │   │   ├── narrative/               # مكونات السرد (DecisionCard, ConsequenceAlert, InsightBox, DecisionFingerprint)
-│   │   └── simulations/             # الجزر التفاعلية الستة
+│   │   └── simulations/             # الجزر التفاعلية ومحاكاة الوكلاء
 │   ├── content/
 │   │   └── chapters/                # ملفات MDX للفصول الستة
 │   ├── layouts/
@@ -163,12 +172,12 @@ Economics/
 │   │   └── global.css               # أنماط Tailwind v4 والزجاجيات والمؤثرات
 │   └── pages/
 │       ├── index.astro              # الصفحة الرئيسية وفهرس التجارب
+│       ├── sandbox.astro            # المخبر الاقتصادي التجريبي الحر
 │       ├── about.astro              # صفحة منشئ المنصة وفلسفة المشروع
 │       └── chapters/[...slug].astro # صفحات التوليد الثابت للفصول
 ├── tests/
-│   └── engine/                      # 48 اختبار Vitest تغطي كافة القوانين الرياضية
-├── run.bat                          # ملف تشغيل فوري على Windows بنقرة واحدة
-└── تشغيل_المنصة.bat                 # اختصار عربي لتشغيل المنصة
+│   └── engine/                      # 75 اختبار Vitest تغطي كافة القوانين الرياضية
+└── run.bat                          # ملف تشغيل فوري على Windows بنقرة واحدة
 ```
 
 ---
@@ -209,7 +218,7 @@ Economics/
 
 ---
 
-## 🧪 التحقق من القوانين الرياضية (54 اختباراً ناجحاً عبر 8 ملفات)
+## 🧪 التحقق من القوانين الرياضية (75 اختباراً ناجحاً عبر 10 ملفات)
 
 تخضع جميع المحركات الرياضية لاختبارات صارمة في بيئة Vitest للتأكد من حتمية القوانين وثبات المخرجات وحفظ الموارد بنسبة 100%:
 
@@ -219,15 +228,17 @@ Economics/
 * `tests/engine/borrowing-tomorrow.test.ts`: خدمة الدين، تضاعف حصاد البئر، وحتمية تعثر الدين الاستهلاكي (4 اختبارات).
 * `tests/engine/whisper-market.test.ts`: حفظ الودائع، انهيار السيولة أثناء الركض المصرفي، وصمامات الأمان الطارئة (6 اختبارات).
 * `tests/engine/price-war.test.ts`: تقاسم السوق بالتساوي عند تطابق السعرين، استحواذ الأرخص على 80%، تآكل الأرباح إلى الصفر عند التكلفة (توازن ناش)، واستجابة خوارزمية الرد بالمثل والتعاون المشروط (7 اختبارات).
-* `tests/engine/archetypes.test.ts`: سلامة تشفير وفك تشفير الحالة في روابط URL، تصنيف الأنماط الفطرية، وأمان دوال الصوت التوليدي في بيئة Node/SSR (8 اختبارات).
-* `tests/engine/agent-economy.test.ts`: حفظ إجمالي الثروة التام في التبادل بين الوكلاء، تتبع معامل جيني، ظهور تفاوت باريتو التلقائي (80/20)، وأثر زكاة الثروة الفطرية (2.5%) في حفظ دوران الأسواق (6 اختبارات).
+* `tests/engine/archetypes.test.ts`: سلامة وتمنيع تشفير وفك تشفير الحالة في روابط URL ضد القيم اللانهائية والمفاتيح غير الموثوقة، تصنيف الأنماط الفطرية بكافة الفصول بنقاط توازن ديناميكية، ونمط مستنزف المشاع الجائر، وأمان دوال الصوت في بيئة Node/SSR (12 اختباراً).
+* `tests/engine/agent-economy.test.ts`: حفظ إجمالي الثروة التام في التبادل بين الوكلاء، تتبع معامل جيني، ظهور تفاوت باريتو التلقائي (80/20)، ونموذج سوق المقايضة متعدد السلع، وأثر زكاة الثروة الفطرية (2.5%) في حفظ دوران الأسواق (12 اختباراً).
+* `tests/engine/socratic-companion.test.ts`: خوارزميات البحث العربي المرن مع مقاومة الكلمات الزائدة (Stopwords)، مطابقة "ال" التعريف والزوائد الإعرابية ثنائية الاتجاه، وحماية الأسئلة الفارغة (8 اختبارات).
+* `tests/engine/event-bridge.test.ts`: معادلة فيشر لكمية النقود بدقة حسابية عائمة، انعدام السعر التضخمي عند غياب النقد، وتوصيل وبث الأحداث الفورية مع ميزة الإعادة الفورية (Last-Value Replay) للجزر المائية المتأخرة (3 اختبارات).
 
 ---
 
 ## 🔬 المخبر الاقتصادي الحر (Sandbox Mode)
 
 يتيح مسار [`/sandbox`](https://github.com/Yahya0071/Innate-Economics/blob/main/src/pages/sandbox.astro) تجربة فريدة كباحث اقتصادي تجريبي حر:
-1. **محاكاة الوكلاء المتعددين (Agent-Based Modeling)**: إطلاق مجتمع من 60 قروياً يتبادلون الثروة بحرية لمراقبة نشوء تفاوت الثروة وقانون باريتو تلقائياً، مع اختبار صمام أمان زكاة الثروة الفطرية.
+1. **محاكاة الوكلاء المتعددين (Agent-Based Modeling)**: إطلاق مجتمع من 60 قروياً يتبادلون السلع والنقود بحرية لمراقبة نشوء تفاوت الثروة وقانون باريتو تلقائياً، مع اختبار صمام أمان زكاة الثروة الفطرية.
 2. **مخبر المنحنيات التفاعلية (Mafs)**: سحب وتحريك منحنيات العرض والطلب باللمس والمؤشر في الزمن الحقيقي لمشاهدة حركة نقطة توازن السوق ($P^*, Q^*$).
 3. **الرادار الخماسي وجواز السفر الاقتصادي (Economic Passport)**: توليد تشخيص دقيق لشخصيتك الاقتصادية عبر 5 أبعاد، وتصدير وثيقة PDF رسمية أو صورة PNG فاخرة (1080x1080).
 
@@ -240,17 +251,16 @@ Economics/
 | المستودع / المشروع | الرابط المباشر | الفئة | القيمة التطبيقية في منصة «الاقتصاد الفطري» |
 | :--- | :--- | :--- | :--- |
 | **The Evolution of Trust** | [`ncase/trust`](https://github.com/ncase/trust) | نظرية الألعاب والشروحات الاستكشافية | الأساس المنهجي لتحليل معضلة السجينين وخوارزمية "السن بالسن" (Tit for Tat) في الفصل السادس. |
-| **QuantEcon** | [`QuantEcon/QuantEcon.py`](https://github.com/QuantEcon/QuantEcon.py) | الاقتصاد القياسي والحوسبي (نوبل سارجنت) | المرجعية الرياضية لنمذجة التفضيلات الزمنية، أسعار الفائدة، والتوازن الديناميكي. |
-| **Mafs** | [`stevenpetryk/mafs`](https://github.com/stevenpetryk/mafs) | الرياضيات والمنحنيات التفاعلية | مدمجة في مخبر المنصة لسحب وتحريك منحنيات العرض والطلب باللمس المباشر. |
-| **TradingView Lightweight Charts** | [`tradingview/lightweight-charts`](https://github.com/tradingview/lightweight-charts) | محركات المحاكاة المالية | محرك فائق السرعة مدمج بالمنصة لرسم مسارات وتذبذبات الأسعار اللحظية. |
-| **Sugarscape & Yard-Sale Models** | [`topics/sugarscape`](https://github.com/topics/sugarscape) | النمذجة القائمة على الوكلاء (ABM) | نمذجة تفاعل 60 وكيلاً وظهور قانون باريتو وتفاوت الثروة التلقائي (المخبر التجريبي). |
+| **QuantEcon** | [`QuantEcon/QuantEcon.py`](https://github.com/QuantEcon/QuantEcon.py) | الاقتصاد القياسي والحوسبي (Python/Julia) | مرجعية نظرية مفتوحة لنمذجة التفضيلات الزمنية، أسعار الفائدة، والتوازن الديناميكي. |
+| **Diamond-Dybvig Bank Run Model** | [`topics/bank-run`](https://en.wikipedia.org/wiki/Diamond%E2%80%93Dybvig_model) | نمذجة الهلع المصرفي والسيولة | الأساس النظري لتشريح أزمة الاحتياطي الجزئي وتدافع المودعين المتزامن في الفصل الخامس. |
+| **Mafs** | [`stevenpetryk/mafs`](https://github.com/stevenpetryk/mafs) | الرياضيات والمنحنيات التفاعلية | مدمجة حياً في مخبر المنصة لسحب وتحريك منحنيات العرض والطلب باللمس المباشر. |
+| **TradingView Lightweight Charts** | [`tradingview/lightweight-charts`](https://github.com/tradingview/lightweight-charts) | محركات الرسم البياني المالي | محرك مدمج حياً بالمنصة لرسم مسارات وتذبذبات الأسعار اللحظية في الزمن الحقيقي. |
+| **Sugarscape & Yard-Sale Models** | [`topics/sugarscape`](https://github.com/topics/sugarscape) | النمذجة القائمة على الوكلاء (ABM) | الأساس المنهجي لمحاكاة تفاعل 60 وكيلاً وظهور قانون باريتو وتفاوت الثروة التلقائي (المخبر). |
 | **CORE Econ** | [`core-econ/the-economy`](https://github.com/core-econ/the-economy) | تعليم الاقتصاد الواقعي المفتوح | فلسفة الانتقال من التجريد الرياضي الجاف إلى دراسة المشكلات الاقتصادية الحية والملموسة. |
-| **Parable of the Polygons** | [`ncase/polygons`](https://github.com/ncase/polygons) | النمذجة القائمة على الوكلاء (ABM) | نمذجة السلوك الجماعي وتجمع الباعة والمشترين التلقائي في الأسواق (الفصل الخامس). |
-| **Matter.js** | [`liabru/matter-js`](https://github.com/liabru/matter-js) | محركات فيزياء 2D | إضفاء الملمس الحسي الفطري (Tactile Feedback) على حركة النقود والسلع وتفاعلها فيزيائياً. |
-| **XYFlow / React Flow** | [`xyflow/xyflow`](https://github.com/xyflow/xyflow) | شبكات التبادل وسلاسل التوريد | محاكاة شبكات التداول المعقدة وتدفق السيولة والائتمان بين القرى. |
+| **Matter.js** | [`liabru/matter-js`](https://github.com/liabru/matter-js) | محركات فيزياء 2D | مدمجة حياً لإضفاء الملمس الحسي الفطري (Tactile Feedback) على سقوط النقود وتراكمها فيزيائياً. |
 | **Explorable Explanations** | [`explorabl.es`](https://explorabl.es) | حركة التعليم النشط والتفاعلي | الميثاق الإرشادي التربوي والبصري الذي تنتهجه المنصة في كافة تجاربها. |
 
-كافة هذه المحركات والمكتبات مدمجة ومفعلة حياً داخل فصول المنصة وفي المخبر التجريبي الحر: [`/sandbox`](https://github.com/Yahya0071/Innate-Economics/blob/main/src/pages/sandbox.astro).
+المكتبات البصرية المدمجة حياً داخل المنصة (`Mafs`، `Lightweight Charts`، `Matter.js`، `canvas-confetti`) تعمل بتناغم تام مع المحركات الرياضية الصرفة المكتوبة بـ TypeScript في كافة فصول المنصة وفي المخبر التجريبي الحر: [`/sandbox`](https://github.com/Yahya0071/Innate-Economics/blob/main/src/pages/sandbox.astro).
 
 ---
 

@@ -67,7 +67,33 @@ describe('Socratic Companion Engine', () => {
     expect(resultsRiba[0].id).toBe('debt-interest-spiral');
   });
 
-  it('generates persona-specific answers for visitor queries', () => {
+  it('matches Arabic keywords regardless of definite article "ال" and proclitics', () => {
+    // Query with "التضخم" should match keyword "تضخم"
+    const resultsDefinite = searchKnowledge('التضخم');
+    expect(resultsDefinite.length).toBeGreaterThan(0);
+    expect(resultsDefinite.some((r) => r.id === 'money-illusion')).toBe(true);
+
+    // Query with proclitic "والتضخم"
+    const resultsProclitic = searchKnowledge('والتضخم');
+    expect(resultsProclitic.length).toBeGreaterThan(0);
+    expect(resultsProclitic.some((r) => r.id === 'money-illusion')).toBe(true);
+  });
+
+  it('filters out Arabic stopwords and resists stopword noise', () => {
+    // Query consisting only of stopwords should return empty results
+    const stopwordOnly = searchKnowledge('ما هو في هل من');
+    expect(stopwordOnly.length).toBe(0);
+
+    // Empty query returns empty by default
+    const emptyResults = searchKnowledge('');
+    expect(emptyResults.length).toBe(0);
+
+    // Empty query with fallback flag returns defaults
+    const defaults = searchKnowledge('', true);
+    expect(defaults.length).toBe(4);
+  });
+
+  it('generates persona-specific answers for visitor queries and guards empty questions', () => {
     const context = detectContext('/chapters/4-borrowing-tomorrow');
     const answerKhaldun = askSocraticAgent('الفائدة المركبة والديون', 'ibn_khaldun', context);
     expect(answerKhaldun.response).toContain('طبائع العمران');
@@ -75,5 +101,10 @@ describe('Socratic Companion Engine', () => {
 
     const answerSmith = askSocraticAgent('الفائدة المركبة والديون', 'adam_smith', context);
     expect(answerSmith.response).toContain('قوانين التبادل');
+
+    // Empty question guard
+    const emptyAnswer = askSocraticAgent('', 'abu_fitra', context);
+    expect(emptyAnswer.matchedEntry).toBeUndefined();
+    expect(emptyAnswer.response).toContain('اطرح عليّ أي تساؤل');
   });
 });

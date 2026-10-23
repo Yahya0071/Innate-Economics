@@ -86,7 +86,7 @@ export const SocraticCompanion: React.FC = () => {
   const challenges = getChallengesForContext(context);
   const currentChallenge: FlashChallenge | undefined = challenges[selectedChallengeIdx] || challenges[0];
 
-  const searchResults = searchKnowledge(searchQuery);
+  const searchResults = searchKnowledge(searchQuery, true);
 
   const handleSelectPersona = (id: PersonaId) => {
     setActivePersonaId(id);

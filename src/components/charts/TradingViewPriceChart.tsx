@@ -125,7 +125,7 @@ export function TradingViewPriceChart({
       topColor,
       bottomColor,
       lineColor,
-      lineWidth: 2.5,
+      lineWidth: 2,
       priceFormat: {
         type: 'custom',
         formatter: (price: number) => `${price.toFixed(2)} ${unit}`,
